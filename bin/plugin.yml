@@ -1,0 +1,11 @@
+name: Armor Control
+author: Staartvin
+website: http://dev.bukkit.org/server-mods/armor-control/
+main: Staartvin.ArmorControl.ArmorControl
+version: 1.0
+description: Control players on wearing armor by experience.
+permissions:
+    armorcontrol.exempt:
+        description: A player with this permission is not bound to any armor restrictions.
+        default: op
+commands:
