@@ -26,6 +26,7 @@ public class ArmorControl extends JavaPlugin implements Listener {
 	int goldLevel = 17;
 	int ironLevel = 22;
 	int diamondLevel = 30;
+	// Small little test
 	
 
 	public void onEnable() {
