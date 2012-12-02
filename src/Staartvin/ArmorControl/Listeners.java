@@ -101,5 +101,35 @@ public class Listeners implements Listener {
 		    		}
 		    	}
 		    }
+		    
+		 // Iron tools
+		    for (int ID : plugin.ironToolsIDs) {
+		    	if (IDinHand == ID) {
+		    		if (!plugin.methods.checkLevel(player, "iron", "tool")) {
+		    			event.setCancelled(true);
+		    			player.sendMessage(ChatColor.RED + "You cannot use this tool! You must be at least level: " + plugin.methods.findLevel("iron", "tool"));
+		    		}
+		    	}
+		    }
+		    
+		 // Gold tools
+		    for (int ID : plugin.goldToolsIDs) {
+		    	if (IDinHand == ID) {
+		    		if (!plugin.methods.checkLevel(player, "gold", "tool")) {
+		    			event.setCancelled(true);
+		    			player.sendMessage(ChatColor.RED + "You cannot use this tool! You must be at least level: " + plugin.methods.findLevel("gold", "tool"));
+		    		}
+		    	}
+		    }
+		    
+		 // Diamond tools
+		    for (int ID : plugin.diamondToolsIDs) {
+		    	if (IDinHand == ID) {
+		    		if (!plugin.methods.checkLevel(player, "diamond", "tool")) {
+		    			event.setCancelled(true);
+		    			player.sendMessage(ChatColor.RED + "You cannot use this tool! You must be at least level: " + plugin.methods.findLevel("diamond", "tool"));
+		    		}
+		    	}
+		    }
 	    }	
 }
