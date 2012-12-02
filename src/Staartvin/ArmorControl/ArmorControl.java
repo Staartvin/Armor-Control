@@ -12,15 +12,38 @@ public class ArmorControl extends JavaPlugin implements Listener {
 	int[] chestplateIDs = {299, 303, 307, 311, 315};
 	int[] leggingIDs = {300, 304, 308, 312, 316};
 	int[] bootIDs = {301, 305, 309, 313, 317};
+	
+	int[] woodToolsIDs = {269, 270, 271, 290};
+	int[] stoneToolsIDs = {273, 274, 275, 291};
+	int[] ironToolsIDs = {256, 257, 258, 292};
+	int[] goldToolsIDs = {284, 285, 286, 294};
+	int[] diamondToolsIDs = {277, 278, 279, 293};
+	
+	int[] weaponIDs = {267, 268, 272, 276, 283, 261};
+	
 	ItemStack armorPart;
 	ItemStack air = new ItemStack(Material.AIR, 1);
 	PlayerInventory inv;
 	
-	int leatherLevel = 5;
-	int chainLevel = 11;
-	int goldLevel = 17;
-	int ironLevel = 22;
-	int diamondLevel = 30;
+	int leatherArmorLevel = 5;
+	int chainArmorLevel = 11;
+	int goldArmorLevel = 17;
+	int ironArmorLevel = 22;
+	int diamondArmorLevel = 30;
+	
+	int woodToolLevel = 5;
+	int stoneToolLevel = 11;
+	int goldToolLevel = 17;
+	int ironToolLevel = 22;
+	int diamondToolLevel = 30;
+	
+	int woodWeaponLevel = 5;
+	int stoneWeaponLevel = 11;
+	int goldWeaponLevel = 17;
+	int ironWeaponLevel = 22;
+	int diamondWeaponLevel = 30;
+	
+	int bowLevel = 15;
 	
 	Listeners listener = new Listeners(this);
 	Methods methods = new Methods(this);
@@ -28,7 +51,7 @@ public class ArmorControl extends JavaPlugin implements Listener {
 	public void onEnable() {
 		getServer().getPluginManager().registerEvents(listener, this);
 		loadConfiguration();
-		methods.checkLimits();
+		methods.readLimits();
 		System.out.println("[" + getDescription().getName()
 				+ "] has been enabled!");
 	}
@@ -45,11 +68,31 @@ public class ArmorControl extends JavaPlugin implements Listener {
 				"ArmorControl v" + getDescription().getVersion() + " Config");
 		
 		getConfig().addDefault("verboseLogging", true);
-		getConfig().addDefault("leatherLevel", 5);
-		getConfig().addDefault("chainLevel", 11);
-		getConfig().addDefault("goldLevel", 17);
-		getConfig().addDefault("ironLevel", 22);
-		getConfig().addDefault("diamondLevel", 30);
+		
+		getConfig().addDefault("leatherArmorLevel", 5);
+		getConfig().addDefault("chainArmorLevel", 11);
+		getConfig().addDefault("goldArmorLevel", 17);
+		getConfig().addDefault("ironArmorLevel", 22);
+		getConfig().addDefault("diamondArmorLevel", 30);
+		
+		getConfig().addDefault("woodToolLevel", 5);
+		getConfig().addDefault("stoneToolLevel", 11);
+		getConfig().addDefault("goldToolLevel", 17);
+		getConfig().addDefault("ironToolLevel", 22);
+		getConfig().addDefault("diamondToolLevel", 30);
+		
+		getConfig().addDefault("woodWeaponLevel", 5);
+		getConfig().addDefault("stoneWeaponLevel", 11);
+		getConfig().addDefault("goldWeaponLevel", 17);
+		getConfig().addDefault("ironWeaponLevel", 22);
+		getConfig().addDefault("diamondWeaponLevel", 30);
+		
+		getConfig().addDefault("bowLevel", 15);
+		
+		getConfig().addDefault("UseArmorControl", true);
+		getConfig().addDefault("UseToolControl", false);
+		getConfig().addDefault("UseWeaponControl", false);
+		
 		getConfig().options().copyDefaults(true);
 		saveConfig();
 	}
