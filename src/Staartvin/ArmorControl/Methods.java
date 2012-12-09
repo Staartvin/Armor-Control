@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * @author Vincent
+ * @author Staartvin
  *
  */
 public class Methods {
@@ -178,7 +178,6 @@ public class Methods {
 		    			}
 		    			mode = "gold";
 		    		} else {
-		    			System.out.print("No ID matched!");
 		    			break;
 		    		}
 		    		plugin.armorPart = new ItemStack(plugin.inv.getHelmet().getType().getId());

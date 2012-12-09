@@ -6,6 +6,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
+/**
+ * @author Staartvin
+ *
+ */
 public class ArmorControl extends JavaPlugin implements Listener {
 
 	int[] helmetIDs = {298, 302, 306, 310, 314};

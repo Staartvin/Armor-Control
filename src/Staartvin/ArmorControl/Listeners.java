@@ -6,9 +6,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 
+/**
+ * @author Staartvin
+ *
+ */
 public class Listeners implements Listener {
 
 	ArmorControl plugin;
@@ -41,6 +46,21 @@ public class Listeners implements Listener {
 	    
 	    plugin.inv = plugin.getServer().getPlayer(event.getPlayer().getName()).getInventory();
 	    plugin.methods.checkInventoryforArmor(player); 
+	}
+	
+	@EventHandler
+	public void onBowUse(EntityShootBowEvent event) {
+		if (!plugin.getConfig().getBoolean("UseWeaponControl")) return;
+		// Entity is not a player
+		if (!(event.getEntity() instanceof Player)) return;
+	    Player player = (Player) event.getEntity();
+	 // Player hasn't got the correct permission
+	    if (player.hasPermission("weaponcontrol.exempt")) return;
+	    
+	    if (player.getLevel() < plugin.bowLevel) {
+	     player.sendMessage(ChatColor.RED + "You cannot use a bow! You must be at least level: " + plugin.bowLevel);
+	     event.setCancelled(true);
+	    }
 	}
 	
 	@EventHandler
