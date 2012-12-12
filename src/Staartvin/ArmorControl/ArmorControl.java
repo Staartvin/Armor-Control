@@ -51,10 +51,11 @@ public class ArmorControl extends JavaPlugin implements Listener {
 	
 	Listeners listener = new Listeners(this);
 	Methods methods = new Methods(this);
+	API api = new API(this);
 	
 	public void onEnable() {
 		getServer().getPluginManager().registerEvents(listener, this);
-		loadConfiguration();
+		methods.loadConfiguration();
 		methods.readLimits();
 		System.out.println("[" + getDescription().getName()
 				+ "] has been enabled!");
@@ -66,38 +67,13 @@ public class ArmorControl extends JavaPlugin implements Listener {
 		System.out.println("[" + getDescription().getName()
 				+ "] has been disabled!");
 	}
-
-	public void loadConfiguration() {
-		getConfig().options().header(
-				"ArmorControl v" + getDescription().getVersion() + " Config");
-		
-		getConfig().addDefault("verboseLogging", true);
-		
-		getConfig().addDefault("leatherArmorLevel", 5);
-		getConfig().addDefault("chainArmorLevel", 11);
-		getConfig().addDefault("goldArmorLevel", 17);
-		getConfig().addDefault("ironArmorLevel", 22);
-		getConfig().addDefault("diamondArmorLevel", 30);
-		
-		getConfig().addDefault("woodToolLevel", 5);
-		getConfig().addDefault("stoneToolLevel", 11);
-		getConfig().addDefault("goldToolLevel", 17);
-		getConfig().addDefault("ironToolLevel", 22);
-		getConfig().addDefault("diamondToolLevel", 30);
-		
-		getConfig().addDefault("woodWeaponLevel", 5);
-		getConfig().addDefault("stoneWeaponLevel", 11);
-		getConfig().addDefault("goldWeaponLevel", 17);
-		getConfig().addDefault("ironWeaponLevel", 22);
-		getConfig().addDefault("diamondWeaponLevel", 30);
-		
-		getConfig().addDefault("bowLevel", 15);
-		
-		getConfig().addDefault("UseArmorControl", true);
-		getConfig().addDefault("UseToolControl", false);
-		getConfig().addDefault("UseWeaponControl", false);
-		
-		getConfig().options().copyDefaults(true);
-		saveConfig();
+	
+	/**
+	 * Get an instance of Armor Control.
+	 * After an instance has been called, you can call all methods.
+	 * @return API class which has all public methods.
+	 */
+	public API getInstance() {
+		return api;
 	}
 }

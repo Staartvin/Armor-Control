@@ -16,7 +16,7 @@ public class Methods {
 		this.plugin = plugin;
 	}
 	
-	public String checkWeaponType(int ID) {
+	protected String checkWeaponType(int ID) {
 		if (ID == 268) return "wood";
 		else if (ID == 272) return "stone";
 		else if (ID == 267) return "iron";
@@ -26,6 +26,40 @@ public class Methods {
 		else return "ID unknown";
 	}
 	
+	protected void loadConfiguration() {
+		plugin.getConfig().options().header(
+				"ArmorControl v" + plugin.getDescription().getVersion() + " Config");
+		
+		plugin.getConfig().addDefault("verboseLogging", true);
+		
+		plugin.getConfig().addDefault("leatherArmorLevel", 5);
+		plugin.getConfig().addDefault("chainArmorLevel", 11);
+		plugin.getConfig().addDefault("goldArmorLevel", 17);
+		plugin.getConfig().addDefault("ironArmorLevel", 22);
+		plugin.getConfig().addDefault("diamondArmorLevel", 30);
+		
+		plugin.getConfig().addDefault("woodToolLevel", 5);
+		plugin.getConfig().addDefault("stoneToolLevel", 11);
+		plugin.getConfig().addDefault("goldToolLevel", 17);
+		plugin.getConfig().addDefault("ironToolLevel", 22);
+		plugin.getConfig().addDefault("diamondToolLevel", 30);
+		
+		plugin.getConfig().addDefault("woodWeaponLevel", 5);
+		plugin.getConfig().addDefault("stoneWeaponLevel", 11);
+		plugin.getConfig().addDefault("goldWeaponLevel", 17);
+		plugin.getConfig().addDefault("ironWeaponLevel", 22);
+		plugin.getConfig().addDefault("diamondWeaponLevel", 30);
+		
+		plugin.getConfig().addDefault("bowLevel", 15);
+		
+		plugin.getConfig().addDefault("UseArmorControl", true);
+		plugin.getConfig().addDefault("UseToolControl", false);
+		plugin.getConfig().addDefault("UseWeaponControl", false);
+		
+		plugin.getConfig().options().copyDefaults(true);
+		plugin.saveConfig();
+	}
+	
 	/**
 	 * Checks level of experience of a player against level limit
 	 * @param player Player to check
@@ -33,7 +67,7 @@ public class Methods {
 	 * @param item Type of item (weapon, tool or armor)
 	 * @return True if player has enough xp
 	 */
-	public boolean checkLevel(Player player, String mode, String item) {
+	protected boolean checkLevel(Player player, String mode, String item) {
 		if (item.equals("weapon")) {
 			if (mode.equals("wood")) {if (player.getLevel() >= plugin.woodWeaponLevel) return true;}
 			else if (mode.equals("stone")) {if (player.getLevel() >= plugin.stoneWeaponLevel) return true;}
@@ -64,7 +98,7 @@ public class Methods {
 	/**
 	 * Reads limits from configuration file.
 	 */
-	public void readLimits() {
+	protected void readLimits() {
 		try {
 			plugin.leatherArmorLevel = plugin.getConfig().getInt("leatherArmorLevel");
 			plugin.chainArmorLevel = plugin.getConfig().getInt("chainArmorLevel");
@@ -120,7 +154,7 @@ public class Methods {
 	 * @param item Type of item (weapon, tool, armor)
 	 * @return Level required to use/wear item/armor.
 	 */
-	public int findLevel(String mode, String item) {
+	protected int findLevel(String mode, String item) {
 		if (item.equals("weapon")) {
 			if (mode.equals("wood")) return plugin.woodToolLevel;
 			else if (mode.equals("stone")) return plugin.stoneToolLevel;
@@ -146,7 +180,7 @@ public class Methods {
 		return 0;
 	}
 	
-	public void checkInventoryforArmor(Player player) {
+	protected void checkInventoryforArmor(Player player) {
 	    if (plugin.inv.getHelmet() != null) {
 	    	for (int i=0;i<plugin.helmetIDs.length;i++) {
 		    	if (plugin.helmetIDs[i] == plugin.inv.getHelmet().getType().getId()) {
