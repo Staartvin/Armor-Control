@@ -10,7 +10,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  * @author Staartvin
  *
  */
-public class ArmorControl extends JavaPlugin implements Listener {
+public class ArmorControl extends JavaPlugin {
 
 	protected int[] helmetIDs = {298, 302, 306, 310, 314};
 	protected int[] chestplateIDs = {299, 303, 307, 311, 315};
