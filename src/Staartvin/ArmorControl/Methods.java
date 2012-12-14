@@ -217,7 +217,11 @@ public class Methods {
 		    		plugin.armorPart = new ItemStack(plugin.inv.getHelmet().getType().getId());
 		    		plugin.armorPart.setDurability(plugin.inv.getHelmet().getDurability());
 		    		if (plugin.inv.getHelmet().getEnchantments().size() != 0) {
-		    			plugin.armorPart.addEnchantments(plugin.inv.getHelmet().getEnchantments());
+		    			try {
+		    				plugin.armorPart.addEnchantments(plugin.inv.getHelmet().getEnchantments());
+		    			} catch (Exception e) {
+		    				plugin.armorPart.addUnsafeEnchantments(plugin.inv.getHelmet().getEnchantments());
+		    			}
 		    		}
 		    		plugin.inv.addItem(plugin.armorPart);
 		    		plugin.inv.setHelmet(plugin.air);
@@ -262,7 +266,11 @@ public class Methods {
 		    		plugin.armorPart = new ItemStack(plugin.inv.getChestplate().getType().getId());
 		    		plugin.armorPart.setDurability(plugin.inv.getChestplate().getDurability());
 		    		if (plugin.inv.getChestplate().getEnchantments().size() != 0) {
-		    			plugin.armorPart.addEnchantments(plugin.inv.getChestplate().getEnchantments());
+		    			try {
+		    				plugin.armorPart.addEnchantments(plugin.inv.getChestplate().getEnchantments());
+		    			} catch (Exception e) {
+		    				plugin.armorPart.addUnsafeEnchantments(plugin.inv.getChestplate().getEnchantments());
+		    			}
 		    		}
 		    		plugin.inv.addItem(plugin.armorPart);
 		    		plugin.inv.setChestplate(plugin.air);
@@ -307,7 +315,11 @@ public class Methods {
 		    		plugin.armorPart = new ItemStack(plugin.inv.getLeggings().getType().getId());
 		    		plugin.armorPart.setDurability(plugin.inv.getLeggings().getDurability());
 		    		if (plugin.inv.getLeggings().getEnchantments().size() != 0) {
-		    			plugin.armorPart.addEnchantments(plugin.inv.getLeggings().getEnchantments());
+		    			try {
+		    				plugin.armorPart.addEnchantments(plugin.inv.getLeggings().getEnchantments());
+		    			} catch (Exception e) {
+		    				plugin.armorPart.addUnsafeEnchantments(plugin.inv.getLeggings().getEnchantments());
+		    			}
 		    		}
 		    		plugin.inv.addItem(plugin.armorPart);
 		    		plugin.inv.setLeggings(plugin.air);
@@ -352,7 +364,11 @@ public class Methods {
 		    		plugin.armorPart = new ItemStack(plugin.inv.getBoots().getType().getId());
 		    		plugin.armorPart.setDurability(plugin.inv.getBoots().getDurability());
 		    		if (plugin.inv.getBoots().getEnchantments().size() != 0) {
-		    			plugin.armorPart.addEnchantments(plugin.inv.getBoots().getEnchantments());
+		    			try {
+		    				plugin.armorPart.addEnchantments(plugin.inv.getBoots().getEnchantments());
+		    			} catch (Exception e) {
+		    				plugin.armorPart.addUnsafeEnchantments(plugin.inv.getBoots().getEnchantments());
+		    			}
 		    		}
 		    		plugin.inv.addItem(plugin.armorPart);
 		    		plugin.inv.setBoots(plugin.air);

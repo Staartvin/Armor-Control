@@ -12,46 +12,46 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class ArmorControl extends JavaPlugin implements Listener {
 
-	int[] helmetIDs = {298, 302, 306, 310, 314};
-	int[] chestplateIDs = {299, 303, 307, 311, 315};
-	int[] leggingIDs = {300, 304, 308, 312, 316};
-	int[] bootIDs = {301, 305, 309, 313, 317};
+	protected int[] helmetIDs = {298, 302, 306, 310, 314};
+	protected int[] chestplateIDs = {299, 303, 307, 311, 315};
+	protected int[] leggingIDs = {300, 304, 308, 312, 316};
+	protected int[] bootIDs = {301, 305, 309, 313, 317};
 	
-	int[] woodToolsIDs = {269, 270, 271, 290};
-	int[] stoneToolsIDs = {273, 274, 275, 291};
-	int[] ironToolsIDs = {256, 257, 258, 292};
-	int[] goldToolsIDs = {284, 285, 286, 294};
-	int[] diamondToolsIDs = {277, 278, 279, 293};
+	protected int[] woodToolsIDs = {269, 270, 271, 290};
+	protected int[] stoneToolsIDs = {273, 274, 275, 291};
+	protected int[] ironToolsIDs = {256, 257, 258, 292};
+	protected int[] goldToolsIDs = {284, 285, 286, 294};
+	protected int[] diamondToolsIDs = {277, 278, 279, 293};
 	
-	int[] weaponIDs = {267, 268, 272, 276, 283, 261};
+	protected int[] weaponIDs = {267, 268, 272, 276, 283, 261};
 	
-	ItemStack armorPart;
-	ItemStack air = new ItemStack(Material.AIR, 1);
-	PlayerInventory inv;
+	protected ItemStack armorPart;
+	protected ItemStack air = new ItemStack(Material.AIR, 1);
+	protected PlayerInventory inv;
 	
-	int leatherArmorLevel = 5;
-	int chainArmorLevel = 11;
-	int goldArmorLevel = 17;
-	int ironArmorLevel = 22;
-	int diamondArmorLevel = 30;
+	protected int leatherArmorLevel = 5;
+	protected int chainArmorLevel = 11;
+	protected int goldArmorLevel = 17;
+	protected int ironArmorLevel = 22;
+	protected int diamondArmorLevel = 30;
 	
-	int woodToolLevel = 5;
-	int stoneToolLevel = 11;
-	int goldToolLevel = 17;
-	int ironToolLevel = 22;
-	int diamondToolLevel = 30;
+	protected int woodToolLevel = 5;
+	protected int stoneToolLevel = 11;
+	protected int goldToolLevel = 17;
+	protected int ironToolLevel = 22;
+	protected int diamondToolLevel = 30;
 	
-	int woodWeaponLevel = 5;
-	int stoneWeaponLevel = 11;
-	int goldWeaponLevel = 17;
-	int ironWeaponLevel = 22;
-	int diamondWeaponLevel = 30;
+	protected int woodWeaponLevel = 5;
+	protected int stoneWeaponLevel = 11;
+	protected int goldWeaponLevel = 17;
+	protected int ironWeaponLevel = 22;
+	protected int diamondWeaponLevel = 30;
 	
-	int bowLevel = 15;
+	protected int bowLevel = 15;
 	
-	Listeners listener = new Listeners(this);
-	Methods methods = new Methods(this);
-	API api = new API(this);
+	protected Listeners listener = new Listeners(this);
+	protected Methods methods = new Methods(this);
+	protected API api = new API(this);
 	
 	public void onEnable() {
 		getServer().getPluginManager().registerEvents(listener, this);
