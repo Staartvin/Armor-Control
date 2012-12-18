@@ -1,7 +1,6 @@
 package Staartvin.ArmorControl;
 
 import org.bukkit.Material;
-import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -24,6 +23,14 @@ public class ArmorControl extends JavaPlugin {
 	protected int[] diamondToolsIDs = {277, 278, 279, 293};
 	
 	protected int[] weaponIDs = {267, 268, 272, 276, 283, 261};
+	
+	// Tekkit support
+	protected int[] tekkitHelmetArmor = {27550, 27576, 27580, 30116, 30174, 30178, 30195};
+	protected int[] tekkitChestPlateArmor = {27549, 27575, 27579, 30173, 30177, 30194};
+	protected int[] tekkitLeggingsArmor = {30172, 30176, 27551, 27577, 27581, 30193};
+	protected int[] tekkitBootsArmor = {27552, 27578, 27582, 30171, 30175, 30192, 30211};
+	
+	protected int[] tekkitSwords = {1275, 1276, 1277, 27546, 27567, 30198};
 	
 	protected ItemStack armorPart;
 	protected ItemStack air = new ItemStack(Material.AIR, 1);
