@@ -38,44 +38,4 @@ public class API {
 	public int getLevelOfItem(String mode, String item) {
 		return plugin.methods.findLevel(mode, item);
 	}
-	
-	/**
-	 * Get the level needed to wear a certain piece of armor.
-	 * @param type Type of armor (leather, chain, gold, iron, diamond)
-	 * @return Level needed to wear armor. Returns -1 if level is not found.
-	 */
-	public int getArmorLevel(String type) {
-		if (type.equals("leather")) {return plugin.leatherArmorLevel;}
-		else if (type.equals("chain")) {return plugin.chainArmorLevel;}
-		else if (type.equals("gold")) {return plugin.goldArmorLevel;}
-		else if (type.equals("iron")) {return plugin.ironArmorLevel;}
-		else if (type.equals("diamond")) {return plugin.diamondArmorLevel;}
-		else {return -1;}
-	}
-	/**
-	 * Get the level needed to use a certain tool.
-	 * @param type Type of tool (wood, stone, gold, iron, diamond)
-	 * @return Level needed to use tool. Returns -1 if level is not found.
-	 */
-	public int getToolLevel(String type) {
-		if (type.equals("wood")) {return plugin.woodToolLevel;}
-		else if (type.equals("stone")) {return plugin.stoneToolLevel;}
-		else if (type.equals("gold")) {return plugin.goldToolLevel;}
-		else if (type.equals("iron")) {return plugin.ironToolLevel;}
-		else if (type.equals("diamond")) {return plugin.diamondToolLevel;}
-		else {return -1;}
-	}
-	/**
-	 * Get the level needed to use a certain tool.
-	 * @param type Type of tool (wood, stone, gold, iron, diamond)
-	 * @return Level needed to use tool. Returns -1 if level is not found.
-	 */
-	public int getWeaponLevel(String type) {
-		if (type.equals("wood")) {return plugin.woodWeaponLevel;}
-		else if (type.equals("stone")) {return plugin.stoneWeaponLevel;}
-		else if (type.equals("gold")) {return plugin.goldWeaponLevel;}
-		else if (type.equals("iron")) {return plugin.ironWeaponLevel;}
-		else if (type.equals("diamond")) {return plugin.diamondWeaponLevel;}
-		else {return -1;}
-	}
 }

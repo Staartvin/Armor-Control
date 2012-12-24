@@ -8,7 +8,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
 
 /**
  * @author Staartvin
@@ -20,19 +19,6 @@ public class Listeners implements Listener {
 	
 	public Listeners (ArmorControl plugin) {
 		this.plugin = plugin;
-	}
-	
-	@EventHandler
-	public void onInventoryOpen(InventoryOpenEvent event) {
-		if (!plugin.getConfig().getBoolean("UseArmorControl")) return;
-		// Player is not online for some reason
-		if (plugin.getServer().getPlayer(event.getPlayer().getName()) == null) return;
-	    Player player = plugin.getServer().getPlayer(event.getPlayer().getName());
-	    // Player hasn't got the correct permission
-	    if (player.hasPermission("armorcontrol.exempt")) return;
-	    
-	    plugin.inv = plugin.getServer().getPlayer(event.getPlayer().getName()).getInventory();
-	    plugin.methods.checkInventoryforArmor(player); 
 	}
 	
 	@EventHandler
