@@ -214,11 +214,11 @@ public class Methods {
 	 */
 	protected int findLevel(String mode, String item) {
 		if (item.equals("weapon")) {
-			if (mode.equals("wood")) return plugin.woodToolLevel;
-			else if (mode.equals("stone")) return plugin.stoneToolLevel;
-			else if (mode.equals("gold")) return plugin.goldToolLevel;
-			else if (mode.equals("iron")) return plugin.ironToolLevel;
-			else if (mode.equals("diamond")) return plugin.diamondToolLevel;
+			if (mode.equals("wood")) return plugin.woodWeaponLevel;
+			else if (mode.equals("stone")) return plugin.stoneWeaponLevel;
+			else if (mode.equals("gold")) return plugin.goldWeaponLevel;
+			else if (mode.equals("iron")) return plugin.ironWeaponLevel;
+			else if (mode.equals("diamond")) return plugin.diamondWeaponLevel;
 			else if (mode.equals("bow")) return plugin.bowLevel;
 		}
 		else if (item.equals("tool")) {

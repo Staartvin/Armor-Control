@@ -52,7 +52,6 @@ public class Listeners implements Listener {
 	@EventHandler
 	public void onWeaponUse(EntityDamageByEntityEvent event) {
 		if (!plugin.getConfig().getBoolean("UseWeaponControl")) return;
-		
 		// Damager is not a player for some reason
 		if (!(event.getDamager() instanceof Player)) return;
 	    Player player = (Player) event.getDamager();
