@@ -28,38 +28,96 @@ public class Methods {
 	
 	protected void loadConfiguration() {
 		plugin.getConfig().options().header(
-				"ArmorControl v" + plugin.getDescription().getVersion() + " Config");
+				"ArmorControl v" + plugin.getDescription().getVersion() + " Config"
+				+ "\nDo not touch the 'upgrade' part. It will mess up the config."
+				+ "\nLatest CraftBukkit version tested on: 1.4.6-R0.1 #2570"
+				+ "\n\nThanks for using Armor Control! Questions? http://dev.bukkit.org/server-mods/armor-control/");
 		
 		plugin.getConfig().addDefault("verboseLogging", true);
 		
-		plugin.getConfig().addDefault("leatherArmorLevel", 5);
-		plugin.getConfig().addDefault("chainArmorLevel", 11);
-		plugin.getConfig().addDefault("goldArmorLevel", 17);
-		plugin.getConfig().addDefault("ironArmorLevel", 22);
-		plugin.getConfig().addDefault("diamondArmorLevel", 30);
+		plugin.getConfig().addDefault("Armor.Leather", 5);
+		plugin.getConfig().addDefault("Armor.Chain", 11);
+		plugin.getConfig().addDefault("Armor.Gold", 17);
+		plugin.getConfig().addDefault("Armor.Iron", 22);
+		plugin.getConfig().addDefault("Armor.Diamond", 30);
 		
-		plugin.getConfig().addDefault("woodToolLevel", 5);
-		plugin.getConfig().addDefault("stoneToolLevel", 11);
-		plugin.getConfig().addDefault("goldToolLevel", 17);
-		plugin.getConfig().addDefault("ironToolLevel", 22);
-		plugin.getConfig().addDefault("diamondToolLevel", 30);
+		plugin.getConfig().addDefault("Tools.Wood", 5);
+		plugin.getConfig().addDefault("Tools.Stone", 11);
+		plugin.getConfig().addDefault("Tools.Gold", 17);
+		plugin.getConfig().addDefault("Tools.Iron", 22);
+		plugin.getConfig().addDefault("Tools.Diamond", 30);
 		
-		plugin.getConfig().addDefault("woodWeaponLevel", 5);
-		plugin.getConfig().addDefault("stoneWeaponLevel", 11);
-		plugin.getConfig().addDefault("goldWeaponLevel", 17);
-		plugin.getConfig().addDefault("ironWeaponLevel", 22);
-		plugin.getConfig().addDefault("diamondWeaponLevel", 30);
+		plugin.getConfig().addDefault("Weapons.Wood", 5);
+		plugin.getConfig().addDefault("Weapons.Stone", 11);
+		plugin.getConfig().addDefault("Weapons.Gold", 17);
+		plugin.getConfig().addDefault("Weapons.Iron", 22);
+		plugin.getConfig().addDefault("Weapons.Diamond", 30);
 		
 		plugin.getConfig().addDefault("bowLevel", 15);
 		
 		plugin.getConfig().addDefault("UseArmorControl", true);
 		plugin.getConfig().addDefault("UseToolControl", false);
 		plugin.getConfig().addDefault("UseWeaponControl", false);
+		plugin.getConfig().addDefault("Upgrade.12-to-13", true);
 		
 		plugin.getConfig().options().copyDefaults(true);
 		plugin.saveConfig();
 	}
 	
+	protected void upgradeConfig(String versionfrom_to) {
+		if (versionfrom_to.equals("1.2-to-1.3")) {
+			
+			if (!plugin.getConfig().getBoolean("Upgrade.12-to-13")) {
+				return;
+			}
+			
+			//Convert old config
+			plugin.getConfig().set("Armor.Leather", plugin.getConfig().getInt("leatherArmorLevel"));
+			plugin.getConfig().set("Armor.Chain", plugin.getConfig().getInt("chainArmorLevel"));
+			plugin.getConfig().set("Armor.Gold", plugin.getConfig().getInt("goldArmorLevel"));
+			plugin.getConfig().set("Armor.Iron", plugin.getConfig().getInt("ironArmorLevel"));
+			plugin.getConfig().set("Armor.Diamond", plugin.getConfig().getInt("diamondArmorLevel"));
+			
+			plugin.getConfig().set("Tools.Wood", plugin.getConfig().getInt("woodToolLevel"));
+			plugin.getConfig().set("Tools.Stone", plugin.getConfig().getInt("stoneToolLevel"));
+			plugin.getConfig().set("Tools.Gold", plugin.getConfig().getInt("goldToolLevel"));
+			plugin.getConfig().set("Tools.Iron", plugin.getConfig().getInt("ironToolLevel"));
+			plugin.getConfig().set("Tools.Diamond", plugin.getConfig().getInt("diamondToolLevel"));
+			
+			plugin.getConfig().set("Weapons.Wood", plugin.getConfig().getInt("woodWeaponLevel"));
+			plugin.getConfig().set("Weapons.Stone", plugin.getConfig().getInt("stoneWeaponLevel"));
+			plugin.getConfig().set("Weapons.Gold", plugin.getConfig().getInt("goldWeaponLevel"));
+			plugin.getConfig().set("Weapons.Iron", plugin.getConfig().getInt("ironWeaponLevel"));
+			plugin.getConfig().set("Weapons.Diamond", plugin.getConfig().getInt("diamondWeaponLevel"));
+			
+			// Remove old options
+			plugin.getConfig().set("leatherArmorLevel", null);
+			plugin.getConfig().set("chainArmorLevel", null);
+			plugin.getConfig().set("goldArmorLevel", null);
+			plugin.getConfig().set("ironArmorLevel", null);
+			plugin.getConfig().set("diamondArmorLevel", null);
+			
+			plugin.getConfig().set("woodToolLevel", null);
+			plugin.getConfig().set("stoneToolLevel", null);
+			plugin.getConfig().set("goldToolLevel", null);
+			plugin.getConfig().set("ironToolLevel", null);
+			plugin.getConfig().set("diamondToolLevel", null);
+			
+			plugin.getConfig().set("woodWeaponLevel", null);
+			plugin.getConfig().set("stoneWeaponLevel", null);
+			plugin.getConfig().set("goldWeaponLevel", null);
+			plugin.getConfig().set("ironWeaponLevel", null);
+			plugin.getConfig().set("diamondWeaponLevel", null);
+			
+			// Notice admin
+			if (plugin.getConfig().getBoolean("verboseLogging")) {
+				System.out.print("[ArmorControl] Old config has been converted to new config");
+			}
+			plugin.getConfig().set("Upgrade.12-to-13", false);
+			
+			plugin.saveConfig();
+		}
+	}
 	/**
 	 * Checks level of experience of a player against level limit
 	 * @param player Player to check
@@ -100,23 +158,23 @@ public class Methods {
 	 */
 	protected void readLimits() {
 		try {
-			plugin.leatherArmorLevel = plugin.getConfig().getInt("leatherArmorLevel");
-			plugin.chainArmorLevel = plugin.getConfig().getInt("chainArmorLevel");
-			plugin.goldArmorLevel = plugin.getConfig().getInt("goldArmorLevel");
-			plugin.ironArmorLevel = plugin.getConfig().getInt("ironArmorLevel");
-			plugin.diamondArmorLevel = plugin.getConfig().getInt("diamondArmorLevel");
+			plugin.leatherArmorLevel = plugin.getConfig().getInt("Armor.Leather");
+			plugin.chainArmorLevel = plugin.getConfig().getInt("Armor.Chain");
+			plugin.goldArmorLevel = plugin.getConfig().getInt("Armor.Gold");
+			plugin.ironArmorLevel = plugin.getConfig().getInt("Armor.Iron");
+			plugin.diamondArmorLevel = plugin.getConfig().getInt("Armor.Diamond");
 			
-			plugin.woodToolLevel = plugin.getConfig().getInt("woodToolLevel");
-			plugin.stoneToolLevel = plugin.getConfig().getInt("stoneToolLevel");
-			plugin.goldToolLevel = plugin.getConfig().getInt("goldToolLevel");
-			plugin.ironToolLevel = plugin.getConfig().getInt("ironToolLevel");
-			plugin.diamondToolLevel = plugin.getConfig().getInt("diamondToolLevel");
+			plugin.woodToolLevel = plugin.getConfig().getInt("Tools.Wood");
+			plugin.stoneToolLevel = plugin.getConfig().getInt("Tools.Stone");
+			plugin.goldToolLevel = plugin.getConfig().getInt("Tools.Gold");
+			plugin.ironToolLevel = plugin.getConfig().getInt("Tools.Iron");
+			plugin.diamondToolLevel = plugin.getConfig().getInt("Tools.Diamond");
 			
-			plugin.woodWeaponLevel = plugin.getConfig().getInt("woodWeaponLevel");
-			plugin.stoneWeaponLevel = plugin.getConfig().getInt("stoneWeaponLevel");
-			plugin.goldWeaponLevel = plugin.getConfig().getInt("goldWeaponLevel");
-			plugin.ironWeaponLevel = plugin.getConfig().getInt("ironWeaponLevel");
-			plugin.diamondWeaponLevel = plugin.getConfig().getInt("diamondWeaponLevel");
+			plugin.woodWeaponLevel = plugin.getConfig().getInt("Weapons.Wood");
+			plugin.stoneWeaponLevel = plugin.getConfig().getInt("Weapons.Stone");
+			plugin.goldWeaponLevel = plugin.getConfig().getInt("Weapons.Gold");
+			plugin.ironWeaponLevel = plugin.getConfig().getInt("Weapons.Iron");
+			plugin.diamondWeaponLevel = plugin.getConfig().getInt("Weapons.Diamond");
 
 			plugin.bowLevel = plugin.getConfig().getInt("bowLevel");
 			

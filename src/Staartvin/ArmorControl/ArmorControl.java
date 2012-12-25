@@ -63,6 +63,7 @@ public class ArmorControl extends JavaPlugin {
 	public void onEnable() {
 		getServer().getPluginManager().registerEvents(listener, this);
 		methods.loadConfiguration();
+		methods.upgradeConfig("1.2-to-1.3");
 		methods.readLimits();
 		System.out.println("[" + getDescription().getName()
 				+ "] has been enabled!");
