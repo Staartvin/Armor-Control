@@ -27,7 +27,7 @@ public class Listeners implements Listener {
 		// Player is not online for some reason
 		if (plugin.getServer().getPlayer(event.getPlayer().getName()) == null) return;
 	    Player player = plugin.getServer().getPlayer(event.getPlayer().getName());
-	 // Player hasn't got the correct permission
+	    // Player hasn't got the correct permission
 	    if (player.hasPermission("armorcontrol.exempt")) return;
 	    
 	    plugin.inv = plugin.getServer().getPlayer(event.getPlayer().getName()).getInventory();
@@ -55,9 +55,8 @@ public class Listeners implements Listener {
 		// Damager is not a player for some reason
 		if (!(event.getDamager() instanceof Player)) return;
 	    Player player = (Player) event.getDamager();
-	 // Player has got the correct exempt permission
+	    // Player has got the correct exempt permission
 	    if (player.hasPermission("weaponcontrol.exempt")) return;
-//	    if (player.getItemInHand() == null) return;
 	    int IDinHand = player.getItemInHand().getTypeId();
 	    // Nothing in hand
 	    if (IDinHand == 0) return;

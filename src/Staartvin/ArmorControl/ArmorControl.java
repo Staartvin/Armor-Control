@@ -1,6 +1,11 @@
 package Staartvin.ArmorControl;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -29,8 +34,9 @@ public class ArmorControl extends JavaPlugin {
 	protected int[] tekkitChestPlateArmor = {27549, 27575, 27579, 30173, 30177, 30194};
 	protected int[] tekkitLeggingsArmor = {30172, 30176, 27551, 27577, 27581, 30193};
 	protected int[] tekkitBootsArmor = {27552, 27578, 27582, 30171, 30175, 30192, 30211};
-	
 	protected int[] tekkitSwords = {1275, 1276, 1277, 27546, 27567, 30198};
+	
+	protected List<String> customIDs = new ArrayList<String>();
 	
 	protected ItemStack armorPart;
 	protected ItemStack air = new ItemStack(Material.AIR, 1);
@@ -59,12 +65,18 @@ public class ArmorControl extends JavaPlugin {
 	protected Listeners listener = new Listeners(this);
 	protected Methods methods = new Methods(this);
 	protected API api = new API(this);
+	protected Configuration config = new Configuration(this);
+	
+	protected FileConfiguration customIDsConfig;
+	protected File customIDsConfigFile;
 	
 	public void onEnable() {
 		getServer().getPluginManager().registerEvents(listener, this);
+		config.reloadCustomIDsConfig();
 		methods.loadConfiguration();
 		methods.upgradeConfig("1.2-to-1.3");
 		methods.readLimits();
+		methods.loadCustomIDs();
 		System.out.println("[" + getDescription().getName()
 				+ "] has been enabled!");
 	}
@@ -72,6 +84,8 @@ public class ArmorControl extends JavaPlugin {
 	public void onDisable() {
 		reloadConfig();
 		saveConfig();
+		config.reloadCustomIDsConfig();
+		config.saveCustomIDsConfig();
 		System.out.println("[" + getDescription().getName()
 				+ "] has been disabled!");
 	}
