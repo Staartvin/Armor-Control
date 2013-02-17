@@ -6,6 +6,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import Staartvin.ArmorControl.Commands.Commands;
 import Staartvin.ArmorControl.Listeners.BlockBreakListener;
 import Staartvin.ArmorControl.Listeners.EntityBowListener;
 import Staartvin.ArmorControl.Listeners.EntityDamageListener;
@@ -43,6 +44,9 @@ public class ArmorControl extends JavaPlugin {
 		methods.upgradeConfig("1.2-to-1.3");
 		methods.readLimits();
 		customIDsClass.loadCustomIDs();
+		
+		getCommand("ac").setExecutor(new Commands(this));
+		
 		System.out.println("[" + getDescription().getName()
 				+ "] has been enabled!");
 	}
