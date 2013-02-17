@@ -1,10 +1,7 @@
 package Staartvin.ArmorControl;
 
-import java.util.List;
-import java.util.Set;
-
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -20,7 +17,7 @@ public class Methods {
 		this.plugin = plugin;
 	}
 	
-	protected String checkWeaponType(int ID) {
+	public String checkWeaponType(int ID) {
 		if (ID == 268) return "wood";
 		else if (ID == 272) return "stone";
 		else if (ID == 267) return "iron";
@@ -34,7 +31,7 @@ public class Methods {
 		plugin.getConfig().options().header(
 				"ArmorControl v" + plugin.getDescription().getVersion() + " Config"
 				+ "\nDo not touch the 'upgrade' part. It will mess up the config."
-				+ "\nLatest CraftBukkit version tested on: 1.4.6-R0.1 #2570"
+				+ "\nLatest CraftBukkit version tested on: 1.4.7-R1.0 #2570"
 				+ "\n\nThanks for using Armor Control! Questions? http://dev.bukkit.org/server-mods/armor-control/");
 		
 		plugin.getConfig().addDefault("verboseLogging", true);
@@ -65,14 +62,14 @@ public class Methods {
 		plugin.getConfig().addDefault("UseWeaponControl", false);
 		plugin.getConfig().addDefault("Upgrade.12-to-13", true);
 		
-		plugin.customIDsConfig.addDefault("Custom IDs.Pumpkin.Data value", "86:0");
-		plugin.customIDsConfig.addDefault("Custom IDs.Pumpkin.Level", 5);
+		plugin.customIDsConfig.addDefault("Custom IDs.Tekkit_Red_Matter_Sword.Data value", 27567);
+		plugin.customIDsConfig.addDefault("Custom IDs.Tekkit_Red_Matter_Sword.Level", 10);
 		
 		plugin.getConfig().options().copyDefaults(true);
 		plugin.saveConfig();
 		
 		plugin.customIDsConfig.options().copyDefaults(true);
-		plugin.config.saveCustomIDsConfig();
+		plugin.getConfiguration().saveCustomIDsConfig();
 	}
 	
 	protected void upgradeConfig(String versionfrom_to) {
@@ -136,30 +133,30 @@ public class Methods {
 	 * @param item Type of item (weapon, tool or armor)
 	 * @return True if player has enough xp
 	 */
-	protected boolean checkLevel(Player player, String mode, String item) {
+	public boolean checkLevel(Player player, String mode, String item) {
 		if (item.equals("weapon")) {
-			if (mode.equals("wood")) {if (player.getLevel() >= plugin.woodWeaponLevel) return true;}
-			else if (mode.equals("stone")) {if (player.getLevel() >= plugin.stoneWeaponLevel) return true;}
-			else if (mode.equals("gold")) {if (player.getLevel() >= plugin.goldWeaponLevel) return true;}
-			else if (mode.equals("iron")) {if (player.getLevel() >= plugin.ironWeaponLevel) return true;}
-			else if (mode.equals("diamond")) {if (player.getLevel() >= plugin.diamondWeaponLevel) return true;}
-			else if (mode.equals("bow")) {if (player.getLevel() >= plugin.bowLevel) return true;}
+			if (mode.equals("wood")) {if (player.getLevel() >= plugin.getLevels().getWoodWeaponLevel()) return true;}
+			else if (mode.equals("stone")) {if (player.getLevel() >= plugin.getLevels().getStoneWeaponLevel()) return true;}
+			else if (mode.equals("gold")) {if (player.getLevel() >= plugin.getLevels().getGoldWeaponLevel()) return true;}
+			else if (mode.equals("iron")) {if (player.getLevel() >= plugin.getLevels().getIronWeaponLevel()) return true;}
+			else if (mode.equals("diamond")) {if (player.getLevel() >= plugin.getLevels().getDiamondWeaponLevel()) return true;}
+			else if (mode.equals("bow")) {if (player.getLevel() >= plugin.getLevels().getBowLevel()) return true;}
 		}
 		else if (item.equals("tool")) {
-			if (mode.equals("wood")) {if (player.getLevel() >= plugin.woodToolLevel) return true;}
-			else if (mode.equals("stone")) {if (player.getLevel() >= plugin.stoneToolLevel) return true;}
-			else if (mode.equals("gold")) {if (player.getLevel() >= plugin.goldToolLevel) return true;}
-			else if (mode.equals("iron")) {if (player.getLevel() >= plugin.ironToolLevel) return true;}
-			else if (mode.equals("diamond")) {if (player.getLevel() >= plugin.diamondToolLevel) return true;}	
+			if (mode.equals("wood")) {if (player.getLevel() >= plugin.getLevels().getWoodToolLevel()) return true;}
+			else if (mode.equals("stone")) {if (player.getLevel() >= plugin.getLevels().getStoneToolLevel()) return true;}
+			else if (mode.equals("gold")) {if (player.getLevel() >= plugin.getLevels().getGoldToolLevel()) return true;}
+			else if (mode.equals("iron")) {if (player.getLevel() >= plugin.getLevels().getIronToolLevel()) return true;}
+			else if (mode.equals("diamond")) {if (player.getLevel() >= plugin.getLevels().getDiamondToolLevel()) return true;}	
 		}
 		else if (item.equals("armor")) {
-			if (mode.equals("leather")) {if (player.getLevel() >= plugin.leatherArmorLevel) return true;}
-			else if (mode.equals("chain")) {if (player.getLevel() >= plugin.chainArmorLevel) return true;}
-			else if (mode.equals("gold")) {if (player.getLevel() >= plugin.goldArmorLevel) return true;}
-			else if (mode.equals("iron")) {if (player.getLevel() >= plugin.ironArmorLevel) return true;}
-			else if (mode.equals("diamond")) {if (player.getLevel() >= plugin.diamondArmorLevel) return true;}	
+			if (mode.equals("leather")) {if (player.getLevel() >= plugin.getLevels().getLeatherArmorLevel()) return true;}
+			else if (mode.equals("chain")) {if (player.getLevel() >= plugin.getLevels().getChainArmorLevel()) return true;}
+			else if (mode.equals("gold")) {if (player.getLevel() >= plugin.getLevels().getGoldArmorLevel()) return true;}
+			else if (mode.equals("iron")) {if (player.getLevel() >= plugin.getLevels().getIronArmorLevel()) return true;}
+			else if (mode.equals("diamond")) {if (player.getLevel() >= plugin.getLevels().getDiamondArmorLevel()) return true;}	
 		}
-		else if (mode.equals("bow")) {if (player.getLevel() >= plugin.bowLevel) return true;}
+		else if (mode.equals("bow")) {if (player.getLevel() >= plugin.getLevels().getBowLevel()) return true;}
 		
 		return false;
 	}
@@ -169,46 +166,46 @@ public class Methods {
 	 */
 	protected void readLimits() {
 		try {
-			plugin.leatherArmorLevel = plugin.getConfig().getInt("Armor.Leather");
-			plugin.chainArmorLevel = plugin.getConfig().getInt("Armor.Chain");
-			plugin.goldArmorLevel = plugin.getConfig().getInt("Armor.Gold");
-			plugin.ironArmorLevel = plugin.getConfig().getInt("Armor.Iron");
-			plugin.diamondArmorLevel = plugin.getConfig().getInt("Armor.Diamond");
+			plugin.getLevels().setLeatherArmorLevel(plugin.getConfig().getInt("Armor.Leather"));
+			plugin.getLevels().setChainArmorLevel(plugin.getConfig().getInt("Armor.Chain"));
+			plugin.getLevels().setGoldArmorLevel(plugin.getConfig().getInt("Armor.Gold"));
+			plugin.getLevels().setIronArmorLevel(plugin.getConfig().getInt("Armor.Iron"));
+			plugin.getLevels().setDiamondArmorLevel(plugin.getConfig().getInt("Armor.Diamond"));
 			
-			plugin.woodToolLevel = plugin.getConfig().getInt("Tools.Wood");
-			plugin.stoneToolLevel = plugin.getConfig().getInt("Tools.Stone");
-			plugin.goldToolLevel = plugin.getConfig().getInt("Tools.Gold");
-			plugin.ironToolLevel = plugin.getConfig().getInt("Tools.Iron");
-			plugin.diamondToolLevel = plugin.getConfig().getInt("Tools.Diamond");
+			plugin.getLevels().setWoodToolLevel(plugin.getConfig().getInt("Tools.Wood"));
+			plugin.getLevels().setStoneToolLevel(plugin.getConfig().getInt("Tools.Stone"));
+			plugin.getLevels().setGoldToolLevel(plugin.getConfig().getInt("Tools.Gold"));
+			plugin.getLevels().setIronToolLevel(plugin.getConfig().getInt("Tools.Iron"));
+			plugin.getLevels().setDiamondToolLevel(plugin.getConfig().getInt("Tools.Diamond"));
 			
-			plugin.woodWeaponLevel = plugin.getConfig().getInt("Weapons.Wood");
-			plugin.stoneWeaponLevel = plugin.getConfig().getInt("Weapons.Stone");
-			plugin.goldWeaponLevel = plugin.getConfig().getInt("Weapons.Gold");
-			plugin.ironWeaponLevel = plugin.getConfig().getInt("Weapons.Iron");
-			plugin.diamondWeaponLevel = plugin.getConfig().getInt("Weapons.Diamond");
+			plugin.getLevels().setWoodWeaponLevel(plugin.getConfig().getInt("Weapons.Wood"));
+			plugin.getLevels().setStoneWeaponLevel(plugin.getConfig().getInt("Weapons.Stone"));
+			plugin.getLevels().setGoldWeaponLevel(plugin.getConfig().getInt("Weapons.Gold"));
+			plugin.getLevels().setIronWeaponLevel(plugin.getConfig().getInt("Weapons.Iron"));
+			plugin.getLevels().setDiamondWeaponLevel(plugin.getConfig().getInt("Weapons.Diamond"));
 
-			plugin.bowLevel = plugin.getConfig().getInt("bowLevel");
+			plugin.getLevels().setBowLevel(plugin.getConfig().getInt("bowLevel"));
 			
 			if (plugin.getConfig().getBoolean("verboseLogging")) {
 			System.out.print("[Armor Control] -------------------------------------------");
-			System.out.print("[Armor Control] Leather Armor level is set to: " + plugin.leatherArmorLevel);
-			System.out.print("[Armor Control] Chain Armor level is set to: " + plugin.chainArmorLevel);
-			System.out.print("[Armor Control] Gold Armor level is set to: " + plugin.goldArmorLevel);
-			System.out.print("[Armor Control] Iron Armor level is set to: " + plugin.ironArmorLevel);
-			System.out.print("[Armor Control] Diamond Armor level is set to: " + plugin.diamondArmorLevel);
+			System.out.print("[Armor Control] Leather Armor level is set to: " + plugin.getLevels().getLeatherArmorLevel());
+			System.out.print("[Armor Control] Chain Armor level is set to: " + plugin.getLevels().getChainArmorLevel());
+			System.out.print("[Armor Control] Gold Armor level is set to: " + plugin.getLevels().getGoldArmorLevel());
+			System.out.print("[Armor Control] Iron Armor level is set to: " + plugin.getLevels().getIronArmorLevel());
+			System.out.print("[Armor Control] Diamond Armor level is set to: " + plugin.getLevels().getDiamondArmorLevel());
 			System.out.print("[Armor Control] -------------------------------------------");
-			System.out.print("[Armor Control] Wooden Tool level is set to: " + plugin.woodToolLevel);
-			System.out.print("[Armor Control] Chain Tool level is set to: " + plugin.stoneToolLevel);
-			System.out.print("[Armor Control] Gold Tool level is set to: " + plugin.goldToolLevel);
-			System.out.print("[Armor Control] Iron Tool level is set to: " + plugin.ironToolLevel);
-			System.out.print("[Armor Control] Diamond Tool level is set to: " + plugin.diamondToolLevel);
+			System.out.print("[Armor Control] Wooden Tool level is set to: " + plugin.getLevels().getWoodToolLevel());
+			System.out.print("[Armor Control] Chain Tool level is set to: " + plugin.getLevels().getStoneToolLevel());
+			System.out.print("[Armor Control] Gold Tool level is set to: " + plugin.getLevels().getGoldToolLevel());
+			System.out.print("[Armor Control] Iron Tool level is set to: " + plugin.getLevels().getIronToolLevel());
+			System.out.print("[Armor Control] Diamond Tool level is set to: " + plugin.getLevels().getDiamondToolLevel());
 			System.out.print("[Armor Control] -------------------------------------------");
-			System.out.print("[Armor Control] Wooden Weapon level is set to: " + plugin.woodWeaponLevel);
-			System.out.print("[Armor Control] Chain Weapon level is set to: " + plugin.stoneWeaponLevel);
-			System.out.print("[Armor Control] Gold Weapon level is set to: " + plugin.goldWeaponLevel);
-			System.out.print("[Armor Control] Iron Weapon level is set to: " + plugin.ironWeaponLevel);
-			System.out.print("[Armor Control] Diamond Weapon level is set to: " + plugin.diamondWeaponLevel);
-			System.out.print("[Armor Control] Bow level is set to: " + plugin.bowLevel);
+			System.out.print("[Armor Control] Wooden Weapon level is set to: " + plugin.getLevels().getWoodWeaponLevel());
+			System.out.print("[Armor Control] Chain Weapon level is set to: " + plugin.getLevels().getStoneWeaponLevel());
+			System.out.print("[Armor Control] Gold Weapon level is set to: " + plugin.getLevels().getGoldWeaponLevel());
+			System.out.print("[Armor Control] Iron Weapon level is set to: " + plugin.getLevels().getIronWeaponLevel());
+			System.out.print("[Armor Control] Diamond Weapon level is set to: " + plugin.getLevels().getDiamondWeaponLevel());
+			System.out.print("[Armor Control] Bow level is set to: " + plugin.getLevels().getBowLevel());
 			System.out.print("[Armor Control] -------------------------------------------");
 			}	
 		} catch (Exception e) {
@@ -223,59 +220,59 @@ public class Methods {
 	 * @param item Type of item (weapon, tool, armor)
 	 * @return Level required to use/wear item/armor.
 	 */
-	protected int findLevel(String mode, String item) {
+	public int findLevel(String mode, String item) {
 		if (item.equals("weapon")) {
-			if (mode.equals("wood")) return plugin.woodWeaponLevel;
-			else if (mode.equals("stone")) return plugin.stoneWeaponLevel;
-			else if (mode.equals("gold")) return plugin.goldWeaponLevel;
-			else if (mode.equals("iron")) return plugin.ironWeaponLevel;
-			else if (mode.equals("diamond")) return plugin.diamondWeaponLevel;
-			else if (mode.equals("bow")) return plugin.bowLevel;
+			if (mode.equals("wood")) return plugin.getLevels().getWoodWeaponLevel();
+			else if (mode.equals("stone")) return plugin.getLevels().getStoneWeaponLevel();
+			else if (mode.equals("gold")) return plugin.getLevels().getGoldWeaponLevel();
+			else if (mode.equals("iron")) return plugin.getLevels().getIronWeaponLevel();
+			else if (mode.equals("diamond")) return plugin.getLevels().getDiamondWeaponLevel();
+			else if (mode.equals("bow")) return plugin.getLevels().getBowLevel();
 		}
 		else if (item.equals("tool")) {
-			if (mode.equals("wood")) return plugin.woodToolLevel;
-			else if (mode.equals("stone")) return plugin.stoneToolLevel;
-			else if (mode.equals("gold")) return plugin.goldToolLevel;
-			else if (mode.equals("iron")) return plugin.ironToolLevel;
-			else if (mode.equals("diamond")) return plugin.diamondToolLevel;
+			if (mode.equals("wood")) return plugin.getLevels().getWoodToolLevel();
+			else if (mode.equals("stone")) return plugin.getLevels().getStoneToolLevel();
+			else if (mode.equals("gold")) return plugin.getLevels().getGoldToolLevel();
+			else if (mode.equals("iron")) return plugin.getLevels().getIronToolLevel();
+			else if (mode.equals("diamond")) return plugin.getLevels().getDiamondToolLevel();
 		}
 		else if (item.equals("armor")) {
-			if (mode.equals("leather")) return plugin.leatherArmorLevel;
-			else if (mode.equals("chain")) return plugin.chainArmorLevel;
-			else if (mode.equals("gold")) return plugin.goldArmorLevel;
-			else if (mode.equals("iron")) return plugin.ironArmorLevel;
-			else if (mode.equals("diamond")) return plugin.diamondArmorLevel;
+			if (mode.equals("leather")) return plugin.getLevels().getLeatherArmorLevel();
+			else if (mode.equals("chain")) return plugin.getLevels().getChainArmorLevel();
+			else if (mode.equals("gold")) return plugin.getLevels().getGoldArmorLevel();
+			else if (mode.equals("iron")) return plugin.getLevels().getIronArmorLevel();
+			else if (mode.equals("diamond")) return plugin.getLevels().getDiamondArmorLevel();
 		}
 		return 0;
 	}
 	
-	protected void checkInventoryforArmor(Player player) {
-	    if (plugin.inv.getHelmet() != null) {
-	    	for (int i=0;i<plugin.helmetIDs.length;i++) {
-		    	if (plugin.helmetIDs[i] == plugin.inv.getHelmet().getType().getId()) {
+	public void checkInventoryforArmor(Player player) {
+	    if (plugin.getInventory().getHelmet() != null) {
+	    	for (int i=0;i<plugin.getLevels().getHelmetIDs().length;i++) {
+		    	if (plugin.getLevels().getHelmetIDs()[i] == plugin.getInventory().getHelmet().getType().getId()) {
 		    		
 		    		String mode;
-		    		if (plugin.inv.getHelmet().getType().getId() == 298) {
+		    		if (plugin.getInventory().getHelmet().getType().getId() == 298) {
 		    			if (checkLevel(player, "leather", "armor")) {
 		    				break;
 		    			}
 		    			mode = "leather";
-		    		} else if (plugin.inv.getHelmet().getType().getId() == 302) {
+		    		} else if (plugin.getInventory().getHelmet().getType().getId() == 302) {
 		    			if (checkLevel(player, "chain", "armor")) {
 		    				break;
 		    			}
 		    			mode = "chain";
-		    		} else if (plugin.inv.getHelmet().getType().getId() == 306) {
+		    		} else if (plugin.getInventory().getHelmet().getType().getId() == 306) {
 		    			if (checkLevel(player, "iron", "armor")) {
 		    				break;
 		    			}
 		    			mode = "iron";
-		    		} else if (plugin.inv.getHelmet().getType().getId() == 310) {
+		    		} else if (plugin.getInventory().getHelmet().getType().getId() == 310) {
 		    			if (checkLevel(player, "diamond", "armor")) {
 		    				break;
 		    			}
 		    			mode = "diamond";
-		    		} else if (plugin.inv.getHelmet().getType().getId() == 314) {
+		    		} else if (plugin.getInventory().getHelmet().getType().getId() == 314) {
 		    			if (checkLevel(player, "gold", "armor")) {
 		    				break;
 		    			}
@@ -283,54 +280,54 @@ public class Methods {
 		    		} else {
 		    			break;
 		    		}
-		    		plugin.armorPart = new ItemStack(plugin.inv.getHelmet().getType().getId());
-		    		plugin.armorPart.setDurability(plugin.inv.getHelmet().getDurability());
-		    		if (plugin.inv.getHelmet().getEnchantments().size() != 0) {
+		    		plugin.setArmorPart(new ItemStack(plugin.getInventory().getHelmet().getType().getId()));
+		    		plugin.getArmorPart().setDurability(plugin.getInventory().getHelmet().getDurability());
+		    		if (plugin.getInventory().getHelmet().getEnchantments().size() != 0) {
 		    			try {
-		    				plugin.armorPart.addEnchantments(plugin.inv.getHelmet().getEnchantments());
+		    				plugin.getArmorPart().addEnchantments(plugin.getInventory().getHelmet().getEnchantments());
 		    			} catch (Exception e) {
-		    				plugin.armorPart.addUnsafeEnchantments(plugin.inv.getHelmet().getEnchantments());
+		    				plugin.getArmorPart().addUnsafeEnchantments(plugin.getInventory().getHelmet().getEnchantments());
 		    			}
 		    		}
-		    		if (plugin.inv.firstEmpty() >= 0) {
-		    			plugin.inv.addItem(plugin.armorPart);
+		    		if (plugin.getInventory().firstEmpty() >= 0) {
+		    			plugin.getInventory().addItem(plugin.getArmorPart());
 		    		}
 		    		else {
-		    			player.getWorld().dropItem(player.getLocation(), plugin.armorPart);
+		    			player.getWorld().dropItem(player.getLocation(), plugin.getArmorPart());
 		    		}
 		    		
-		    		plugin.inv.setHelmet(plugin.air);
+		    		plugin.getInventory().setHelmet(new ItemStack(Material.AIR, 1));
 		    		player.sendMessage(ChatColor.RED + "You cannot wear this helmet. You must be at least level: " + findLevel(mode, "armor"));
 		    		break;
 		    	}
 		    }
 	    }
-	    if (plugin.inv.getChestplate() != null) {
-	    	for (int i=0;i<plugin.chestplateIDs.length;i++) {
-		    	if (plugin.chestplateIDs[i] == plugin.inv.getChestplate().getType().getId()) {
+	    if (plugin.getInventory().getChestplate() != null) {
+	    	for (int i=0;i<plugin.getLevels().getChestplateIDs().length;i++) {
+		    	if (plugin.getLevels().getChestplateIDs()[i] == plugin.getInventory().getChestplate().getType().getId()) {
 		    		
 		    		String mode;
-		    		if (plugin.inv.getChestplate().getType().getId() == 299) {
+		    		if (plugin.getInventory().getChestplate().getType().getId() == 299) {
 		    			if (checkLevel(player, "leather", "armor")) {
 		    				break;
 		    			}
 		    			mode = "leather";
-		    		} else if (plugin.inv.getChestplate().getType().getId() == 303) {
+		    		} else if (plugin.getInventory().getChestplate().getType().getId() == 303) {
 		    			if (checkLevel(player, "chain", "armor")) {
 		    				break;
 		    			}
 		    			mode = "chain";
-		    		} else if (plugin.inv.getChestplate().getType().getId() == 307) {
+		    		} else if (plugin.getInventory().getChestplate().getType().getId() == 307) {
 		    			if (checkLevel(player, "iron", "armor")) {
 		    				break;
 		    			}
 		    			mode = "iron";
-		    		} else if (plugin.inv.getChestplate().getType().getId() == 311) {
+		    		} else if (plugin.getInventory().getChestplate().getType().getId() == 311) {
 		    			if (checkLevel(player, "diamond", "armor")) {
 		    				break;
 		    			}
 		    			mode = "diamond";
-		    		} else if (plugin.inv.getChestplate().getType().getId() == 315) {
+		    		} else if (plugin.getInventory().getChestplate().getType().getId() == 315) {
 		    			if (checkLevel(player, "gold", "armor")) {
 		    				break;
 		    			}
@@ -338,53 +335,53 @@ public class Methods {
 		    		} else {
 		    			break;
 		    		}
-		    		plugin.armorPart = new ItemStack(plugin.inv.getChestplate().getType().getId());
-		    		plugin.armorPart.setDurability(plugin.inv.getChestplate().getDurability());
-		    		if (plugin.inv.getChestplate().getEnchantments().size() != 0) {
+		    		plugin.setArmorPart(new ItemStack(plugin.getInventory().getChestplate().getType().getId()));
+		    		plugin.getArmorPart().setDurability(plugin.getInventory().getChestplate().getDurability());
+		    		if (plugin.getInventory().getChestplate().getEnchantments().size() != 0) {
 		    			try {
-		    				plugin.armorPart.addEnchantments(plugin.inv.getChestplate().getEnchantments());
+		    				plugin.getArmorPart().addEnchantments(plugin.getInventory().getChestplate().getEnchantments());
 		    			} catch (Exception e) {
-		    				plugin.armorPart.addUnsafeEnchantments(plugin.inv.getChestplate().getEnchantments());
+		    				plugin.getArmorPart().addUnsafeEnchantments(plugin.getInventory().getChestplate().getEnchantments());
 		    			}
 		    		}
-		    		if (plugin.inv.firstEmpty() >= 0) {
-		    			plugin.inv.addItem(plugin.armorPart);
+		    		if (plugin.getInventory().firstEmpty() >= 0) {
+		    			plugin.getInventory().addItem(plugin.getArmorPart());
 		    		}
 		    		else {
-		    			player.getWorld().dropItem(player.getLocation(), plugin.armorPart);
+		    			player.getWorld().dropItem(player.getLocation(), plugin.getArmorPart());
 		    		}
-		    		plugin.inv.setChestplate(plugin.air);
+		    		plugin.getInventory().setChestplate(new ItemStack(Material.AIR, 1));
 		    		player.sendMessage(ChatColor.RED + "You cannot wear this chestplate. You must be at least level: " + findLevel(mode, "armor"));
 		    		break;
 		    		}
 		    	}
 		    }
-	    if (plugin.inv.getLeggings() != null) {
-	    	for (int i=0;i<plugin.leggingIDs.length;i++) {
-		    	if (plugin.leggingIDs[i] == plugin.inv.getLeggings().getType().getId()) {
+	    if (plugin.getInventory().getLeggings() != null) {
+	    	for (int i=0;i<plugin.getLevels().getLeggingIDs().length;i++) {
+		    	if (plugin.getLevels().getLeggingIDs()[i] == plugin.getInventory().getLeggings().getType().getId()) {
 		    		
 		    		String mode;
-		    		if (plugin.inv.getLeggings().getType().getId() == 300) {
+		    		if (plugin.getInventory().getLeggings().getType().getId() == 300) {
 		    			if (checkLevel(player, "leather", "armor")) {
 		    				break;
 		    			}
 		    			mode = "leather";
-		    		} else if (plugin.inv.getLeggings().getType().getId() == 304) {
+		    		} else if (plugin.getInventory().getLeggings().getType().getId() == 304) {
 		    			if (checkLevel(player, "chain", "armor")) {
 		    				break;
 		    			}
 		    			mode = "chain";
-		    		} else if (plugin.inv.getLeggings().getType().getId() == 308) {
+		    		} else if (plugin.getInventory().getLeggings().getType().getId() == 308) {
 		    			if (checkLevel(player, "iron", "armor")) {
 		    				break;
 		    			}
 		    			mode = "iron";
-		    		} else if (plugin.inv.getLeggings().getType().getId() == 312) {
+		    		} else if (plugin.getInventory().getLeggings().getType().getId() == 312) {
 		    			if (checkLevel(player, "diamond", "armor")) {
 		    				break;
 		    			}
 		    			mode = "diamond";
-		    		} else if (plugin.inv.getLeggings().getType().getId() == 316) {
+		    		} else if (plugin.getInventory().getLeggings().getType().getId() == 316) {
 		    			if (checkLevel(player, "gold", "armor")) {
 		    				break;
 		    			}
@@ -392,53 +389,53 @@ public class Methods {
 		    		} else {
 		    			break;
 		    		}
-		    		plugin.armorPart = new ItemStack(plugin.inv.getLeggings().getType().getId());
-		    		plugin.armorPart.setDurability(plugin.inv.getLeggings().getDurability());
-		    		if (plugin.inv.getLeggings().getEnchantments().size() != 0) {
+		    		plugin.setArmorPart(new ItemStack(plugin.getInventory().getLeggings().getType().getId()));
+		    		plugin.getArmorPart().setDurability(plugin.getInventory().getLeggings().getDurability());
+		    		if (plugin.getInventory().getLeggings().getEnchantments().size() != 0) {
 		    			try {
-		    				plugin.armorPart.addEnchantments(plugin.inv.getLeggings().getEnchantments());
+		    				plugin.getArmorPart().addEnchantments(plugin.getInventory().getLeggings().getEnchantments());
 		    			} catch (Exception e) {
-		    				plugin.armorPart.addUnsafeEnchantments(plugin.inv.getLeggings().getEnchantments());
+		    				plugin.getArmorPart().addUnsafeEnchantments(plugin.getInventory().getLeggings().getEnchantments());
 		    			}
 		    		}
-		    		if (plugin.inv.firstEmpty() >= 0) {
-		    			plugin.inv.addItem(plugin.armorPart);
+		    		if (plugin.getInventory().firstEmpty() >= 0) {
+		    			plugin.getInventory().addItem(plugin.getArmorPart());
 		    		}
 		    		else {
-		    			player.getWorld().dropItem(player.getLocation(), plugin.armorPart);
+		    			player.getWorld().dropItem(player.getLocation(), plugin.getArmorPart());
 		    		}
-		    		plugin.inv.setLeggings(plugin.air);
+		    		plugin.getInventory().setLeggings(new ItemStack(Material.AIR, 1));
 		    		player.sendMessage(ChatColor.RED + "You cannot wear these leggings. You must be at least level: " + findLevel(mode, "armor"));
 		    		break;
 		    	}
 		    }
 	    }
-	    if (plugin.inv.getBoots() != null) {
-	    	for (int i=0;i<plugin.bootIDs.length;i++) {
-		    	if (plugin.bootIDs[i] == plugin.inv.getBoots().getType().getId()) {
+	    if (plugin.getInventory().getBoots() != null) {
+	    	for (int i=0;i<plugin.getLevels().getBootIDs().length;i++) {
+		    	if (plugin.getLevels().getBootIDs()[i] == plugin.getInventory().getBoots().getType().getId()) {
 
 		    		String mode;
-		    		if (plugin.inv.getBoots().getType().getId() == 301) {
+		    		if (plugin.getInventory().getBoots().getType().getId() == 301) {
 		    			if (checkLevel(player, "leather", "armor")) {
 		    				break;
 		    			}
 		    			mode = "leather";
-		    		} else if (plugin.inv.getBoots().getType().getId() == 305) {
+		    		} else if (plugin.getInventory().getBoots().getType().getId() == 305) {
 		    			if (checkLevel(player, "chain", "armor")) {
 		    				break;
 		    			}
 		    			mode = "chain";
-		    		} else if (plugin.inv.getBoots().getType().getId() == 309) {
+		    		} else if (plugin.getInventory().getBoots().getType().getId() == 309) {
 		    			if (checkLevel(player, "iron", "armor")) {
 		    				break;
 		    			}
 		    			mode = "iron";
-		    		} else if (plugin.inv.getBoots().getType().getId() == 313) {
+		    		} else if (plugin.getInventory().getBoots().getType().getId() == 313) {
 		    			if (checkLevel(player, "diamond", "armor")) {
 		    				break;
 		    			}
 		    			mode = "diamond";
-		    		} else if (plugin.inv.getBoots().getType().getId() == 317) {
+		    		} else if (plugin.getInventory().getBoots().getType().getId() == 317) {
 		    			if (checkLevel(player, "gold", "armor")) {
 		    				break;
 		    			}
@@ -446,22 +443,22 @@ public class Methods {
 		    		} else {
 		    			break;
 		    		}
-		    		plugin.armorPart = new ItemStack(plugin.inv.getBoots().getType().getId());
-		    		plugin.armorPart.setDurability(plugin.inv.getBoots().getDurability());
-		    		if (plugin.inv.getBoots().getEnchantments().size() != 0) {
+		    		plugin.setArmorPart(new ItemStack(plugin.getInventory().getBoots().getType().getId()));
+		    		plugin.getArmorPart().setDurability(plugin.getInventory().getBoots().getDurability());
+		    		if (plugin.getInventory().getBoots().getEnchantments().size() != 0) {
 		    			try {
-		    				plugin.armorPart.addEnchantments(plugin.inv.getBoots().getEnchantments());
+		    				plugin.getArmorPart().addEnchantments(plugin.getInventory().getBoots().getEnchantments());
 		    			} catch (Exception e) {
-		    				plugin.armorPart.addUnsafeEnchantments(plugin.inv.getBoots().getEnchantments());
+		    				plugin.getArmorPart().addUnsafeEnchantments(plugin.getInventory().getBoots().getEnchantments());
 		    			}
 		    		}
-		    		if (plugin.inv.firstEmpty() >= 0) {
-		    			plugin.inv.addItem(plugin.armorPart);
+		    		if (plugin.getInventory().firstEmpty() >= 0) {
+		    			plugin.getInventory().addItem(plugin.getArmorPart());
 		    		}
 		    		else {
-		    			player.getWorld().dropItem(player.getLocation(), plugin.armorPart);
+		    			player.getWorld().dropItem(player.getLocation(), plugin.getArmorPart());
 		    		}
-		    		plugin.inv.setBoots(plugin.air);
+		    		plugin.getInventory().setBoots(new ItemStack(Material.AIR, 1));
 		    		player.sendMessage(ChatColor.RED + "You cannot wear these boots. You must be at least level: " + findLevel(mode, "armor"));
 		    		break;
 		    	}
@@ -469,35 +466,27 @@ public class Methods {
 		}
 	}
 	
-	protected void loadCustomIDs() {
-		if (!plugin.getConfig().getBoolean("Use custom IDs")) return;
-		
-		FileConfiguration config = plugin.customIDsConfig;
-		Set<String> keys = plugin.customIDsConfig.getConfigurationSection("Custom IDs").getKeys(false);
-		Object[] tempArray = keys.toArray();
-		
-		for (int i=0;i<keys.size();i++) {
-			String result = "";
-			result = result.concat(config.getString("Custom IDs." + tempArray[i] + ".Data value").concat(":" + tempArray[i]));
-			plugin.customIDs.add(result);
-		}
-		System.out.println("[" + plugin.getDescription().getName()
-				+ "] Custom ID config loaded!");
-	}
-	
-	protected String getCustomID(String ID) {
-		if (!plugin.getConfig().getBoolean("Use custom IDs")) return null;
-		if (plugin.customIDs.size() == 0) return null;
-		List<String> customIDs = plugin.customIDs;
-		
-		for (int i=0;i<customIDs.size();i++){
-			if (customIDs.get(i).contains(ID)) {
-				String[] tempArray = {};
-				tempArray = customIDs.get(i).split(":");
-				if (tempArray.length != 3) return null;
-				return tempArray[2];
-			}
-		}
-		return null;
+	public boolean isNotAllowedCustomID(Integer IDinHand, Player player) {
+	    for (String id: plugin.getCustomIDClass().getCustomIDs()) {
+	    	String[] tempArray = id.split(":");
+	    	String name = tempArray[1];
+	    	String DV = tempArray[0];
+	    	int ID = 0;
+	    	try {
+	    		ID = Integer.parseInt(DV);
+	    	} catch(Exception e) {
+	    		System.out.print("[ArmorControl] ERROR OCCURED: CUSTOM ID '" + name + "' DOES NOT HAVE A VALID DATA VALUE! CHECK YOUR CONFIG!");
+	    		return false;
+	    	}
+	    	if (ID == IDinHand) {
+	    		if (!(player.getLevel() >= plugin.getCustomIDClass().findLevel(name))) {
+	    			player.sendMessage(ChatColor.RED + "You cannot use this! You must be at least level: " + plugin.getCustomIDClass().findLevel(name));
+		    		return true;
+	    		}
+	    		return false;
+	    	}
+	    	continue;
+	    }
+	    return false;
 	}
 }
