@@ -26,8 +26,8 @@ public class BlockBreakListener implements Listener {
 	    // Player has got the correct exempt permission
 	    if (player.hasPermission("toolcontrol.exempt")) return;
 	    int IDinHand = player.getItemInHand().getTypeId();
-	    System.out.print("Item ID: " + IDinHand + ":" + player.getItemInHand().getData().getData());
 	    
+	    // Check for custom IDs
 	    if (plugin.getMethods().isNotAllowedCustomID(IDinHand, player)) {
     		event.setCancelled(true);
     		return;

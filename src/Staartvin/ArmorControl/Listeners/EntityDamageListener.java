@@ -28,6 +28,13 @@ public class EntityDamageListener implements Listener {
 	    System.out.print("Item ID: " + IDinHand);
 	    // Nothing in hand
 	    if (IDinHand == 0) return;
+	    
+	    // Check for custom IDs
+	    if (plugin.getMethods().isNotAllowedCustomID(IDinHand, player)) {
+    		event.setCancelled(true);
+    		return;
+	    }
+	    
 	    if (IDinHand == 267 || IDinHand == 268 || IDinHand == 272 || IDinHand == 276 || IDinHand == 283 || IDinHand == 261) {
 		    for (int ID : plugin.getLevels().getWeaponIDs()) {
 		    	if (IDinHand == ID) {
