@@ -292,7 +292,13 @@ public class Methods {
 		    				plugin.armorPart.addUnsafeEnchantments(plugin.inv.getHelmet().getEnchantments());
 		    			}
 		    		}
-		    		plugin.inv.addItem(plugin.armorPart);
+		    		if (plugin.inv.firstEmpty() >= 0) {
+		    			plugin.inv.addItem(plugin.armorPart);
+		    		}
+		    		else {
+		    			player.getWorld().dropItem(player.getLocation(), plugin.armorPart);
+		    		}
+		    		
 		    		plugin.inv.setHelmet(plugin.air);
 		    		player.sendMessage(ChatColor.RED + "You cannot wear this helmet. You must be at least level: " + findLevel(mode, "armor"));
 		    		break;
@@ -341,7 +347,12 @@ public class Methods {
 		    				plugin.armorPart.addUnsafeEnchantments(plugin.inv.getChestplate().getEnchantments());
 		    			}
 		    		}
-		    		plugin.inv.addItem(plugin.armorPart);
+		    		if (plugin.inv.firstEmpty() >= 0) {
+		    			plugin.inv.addItem(plugin.armorPart);
+		    		}
+		    		else {
+		    			player.getWorld().dropItem(player.getLocation(), plugin.armorPart);
+		    		}
 		    		plugin.inv.setChestplate(plugin.air);
 		    		player.sendMessage(ChatColor.RED + "You cannot wear this chestplate. You must be at least level: " + findLevel(mode, "armor"));
 		    		break;
@@ -390,7 +401,12 @@ public class Methods {
 		    				plugin.armorPart.addUnsafeEnchantments(plugin.inv.getLeggings().getEnchantments());
 		    			}
 		    		}
-		    		plugin.inv.addItem(plugin.armorPart);
+		    		if (plugin.inv.firstEmpty() >= 0) {
+		    			plugin.inv.addItem(plugin.armorPart);
+		    		}
+		    		else {
+		    			player.getWorld().dropItem(player.getLocation(), plugin.armorPart);
+		    		}
 		    		plugin.inv.setLeggings(plugin.air);
 		    		player.sendMessage(ChatColor.RED + "You cannot wear these leggings. You must be at least level: " + findLevel(mode, "armor"));
 		    		break;
@@ -439,7 +455,12 @@ public class Methods {
 		    				plugin.armorPart.addUnsafeEnchantments(plugin.inv.getBoots().getEnchantments());
 		    			}
 		    		}
-		    		plugin.inv.addItem(plugin.armorPart);
+		    		if (plugin.inv.firstEmpty() >= 0) {
+		    			plugin.inv.addItem(plugin.armorPart);
+		    		}
+		    		else {
+		    			player.getWorld().dropItem(player.getLocation(), plugin.armorPart);
+		    		}
 		    		plugin.inv.setBoots(plugin.air);
 		    		player.sendMessage(ChatColor.RED + "You cannot wear these boots. You must be at least level: " + findLevel(mode, "armor"));
 		    		break;
