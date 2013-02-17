@@ -32,9 +32,6 @@ public class CustomIDs {
 			customDataValues.add(intResult);
 		}
 		
-		for (String customID: customIDs) {
-			System.out.print("Custom ID: " + customID);
-		}
 		System.out.println("[" + plugin.getDescription().getName()
 				+ "] Custom ID config loaded!");
 	}
