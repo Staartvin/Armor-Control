@@ -26,7 +26,7 @@ public class API {
 	 * @return True if player has enough xp
 	 */
 	public boolean isAllowedToUse(Player player, String mode, String item) {
-		return plugin.methods.checkLevel(player, mode, item);
+		return plugin.getMethods().checkLevel(player, mode, item);
 	}
 	
 	/**
@@ -36,6 +36,6 @@ public class API {
 	 * @return Level required to use/wear item/armor.
 	 */
 	public int getLevelOfItem(String mode, String item) {
-		return plugin.methods.findLevel(mode, item);
+		return plugin.getMethods().findLevel(mode, item);
 	}
 }
