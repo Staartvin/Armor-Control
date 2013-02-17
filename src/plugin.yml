@@ -2,7 +2,7 @@ name: Armor Control
 author: Staartvin
 website: http://dev.bukkit.org/server-mods/armor-control/
 main: Staartvin.ArmorControl.ArmorControl
-version: 1.3.2
+version: 1.4
 description: Control players on wearing armor or using weapons/tools by experience.
 permissions:
     armorcontrol.exempt:
@@ -14,4 +14,11 @@ permissions:
     weaponcontrol.exempt:
         description: A player with this permission is not bound to any weapons restrictions.
         default: false
+    armorcontrol.reload:
+        description: A player with this permission is allowed to perform /ac reload.
+        default: op
 commands:
+    ac:
+      description: Master command of Armor Control.
+      usage: /<command> <argument>
+      aliases: [armorcontrol]
