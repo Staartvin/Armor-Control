@@ -25,7 +25,6 @@ public class EntityDamageListener implements Listener {
 	    // Player has got the correct exempt permission
 	    if (player.hasPermission("weaponcontrol.exempt")) return;
 	    int IDinHand = player.getItemInHand().getTypeId();
-	    System.out.print("Item ID: " + IDinHand);
 	    // Nothing in hand
 	    if (IDinHand == 0) return;
 	    
