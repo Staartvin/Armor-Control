@@ -562,7 +562,7 @@ public class Methods {
 					// Check for custom IDs
 					if (plugin.getMethods()
 							.isNotAllowedCustomID(
-									plugin.getInventory().getHelmet().getType()
+									plugin.getInventory().getChestplate().getType()
 											.getId(), player)) {
 
 						plugin.setArmorPart(new ItemStack(plugin.getInventory()
@@ -668,7 +668,7 @@ public class Methods {
 					// Check for custom IDs
 					if (plugin.getMethods()
 							.isNotAllowedCustomID(
-									plugin.getInventory().getHelmet().getType()
+									plugin.getInventory().getLeggings().getType()
 											.getId(), player)) {
 						plugin.setArmorPart(new ItemStack(plugin.getInventory()
 								.getLeggings().getType().getId()));
@@ -770,7 +770,7 @@ public class Methods {
 					// Check for custom IDs
 					if (plugin.getMethods()
 							.isNotAllowedCustomID(
-									plugin.getInventory().getHelmet().getType()
+									plugin.getInventory().getBoots().getType()
 											.getId(), player)) {
 						plugin.setArmorPart(new ItemStack(plugin.getInventory()
 								.getBoots().getType().getId()));
@@ -803,8 +803,7 @@ public class Methods {
 	}
 
 	public boolean isNotAllowedCustomID(Integer IDinHand, Player player) {
-		if (!plugin.getConfig().getBoolean("Use custom IDs"))
-			return false;
+		if (!plugin.getConfig().getBoolean("Use custom IDs")) return false;
 
 		for (String id : plugin.getCustomIDClass().getCustomIDs()) {
 			String[] tempArray = id.split(":");

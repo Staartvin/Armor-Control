@@ -39,6 +39,8 @@ public class EntityDamageListener implements Listener {
 		    	if (IDinHand == ID) {
 		    		if (!plugin.getMethods().checkLevel(player, plugin.getMethods().checkWeaponType(ID), "weapon")) {
 		    			event.setCancelled(true);
+		    			short newDurability = (short) (player.getItemInHand().getDurability() - 0);
+		    			player.getItemInHand().setDurability(newDurability);
 		    			player.sendMessage(ChatColor.RED + "You cannot use this weapon! You must be at least level: " + plugin.getMethods().findLevel(plugin.getMethods().checkWeaponType(ID), "weapon"));
 		    		}
 		    	}

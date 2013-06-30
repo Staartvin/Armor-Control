@@ -60,9 +60,44 @@ public class Commands implements CommandExecutor {
 						+ " --- Shows a list of commands");
 				sender.sendMessage(ChatColor.GOLD + "/ac reload"
 						+ ChatColor.BLUE + " --- Reloads Armor Control");
+				sender.sendMessage(ChatColor.GOLD + "/ac add <name> <data value> <level>"
+						+ ChatColor.BLUE + " --- Add a custom ID");
+				return true;
+			}
+		} else if (args.length == 4) {
+			// /ac add <name> <data value> <level>
+			
+			if (args[0].equalsIgnoreCase("add")) {
+				if (!hasPermission("armorcontrol.add", sender))
+					return true;
+				
+				int dataValue = 0;
+				int level = 0;
+				String name = args[1];
+				
+				try {
+					dataValue = Integer.parseInt(args[2]);
+				} catch (Exception e) {
+					sender.sendMessage(ChatColor.RED + args[2] + " is not a number!");
+					return true;
+				}
+				
+				try {
+					level = Integer.parseInt(args[3]);
+				} catch (Exception e) {
+					sender.sendMessage(ChatColor.RED + args[3] + " is not a number!");
+					return true;
+				}
+				
+				if (!plugin.getConfiguration().addCustomID(name, dataValue, level)) {
+					sender.sendMessage(ChatColor.RED + "Custom ID with name '" + name + "' does already exist!");
+					return true;
+				}
+				sender.sendMessage(ChatColor.GREEN + "Custom ID '" + name + "' with data value " + dataValue + " and level " + level + " added!");
 				return true;
 			}
 		}
+			
 
 		sender.sendMessage(ChatColor.BLUE
 				+ "-----------------------------------------------------");

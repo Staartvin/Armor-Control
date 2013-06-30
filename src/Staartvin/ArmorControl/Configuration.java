@@ -52,4 +52,16 @@ public class Configuration {
 							"Could not save config to " + plugin.customIDsConfigFile, ex);
 				}
 			}
+			
+			public boolean addCustomID(String name, Integer dataValue, Integer level) {
+				if (plugin.customIDsConfig.getInt("Custom IDs." + name + ".Data value") != 0) {
+					return false;
+				}
+				
+				plugin.customIDsConfig.set("Custom IDs." + name + ".Data value", dataValue);
+				plugin.customIDsConfig.set("Custom IDs." + name + ".Level", level);
+				
+				saveCustomIDsConfig();
+				return true;
+			}
 }
