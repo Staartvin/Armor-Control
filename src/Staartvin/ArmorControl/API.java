@@ -1,5 +1,7 @@
 package Staartvin.ArmorControl;
 
+import java.util.List;
+
 import org.bukkit.entity.Player;
 
 public class API {
@@ -37,5 +39,13 @@ public class API {
 	 */
 	public int getLevelOfItem(String mode, String item) {
 		return plugin.getMethods().findLevel(mode, item);
+	}
+	
+	public List<String> getDisabledWorlds() {
+		return plugin.getWorldHandler().getDisabledWorlds();
+	}
+	
+	public boolean isDisabledWorld(String world) {
+		return plugin.getWorldHandler().isDisabled(world);
 	}
 }

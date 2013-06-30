@@ -10,21 +10,30 @@ import Staartvin.ArmorControl.ArmorControl;
 public class InventoryListener implements Listener {
 
 	ArmorControl plugin;
-	
-	public InventoryListener (ArmorControl plugin) {
+
+	public InventoryListener(ArmorControl plugin) {
 		this.plugin = plugin;
 	}
-	
+
 	@EventHandler
 	public void onInventoryClose(InventoryCloseEvent event) {
-		if (!plugin.getConfig().getBoolean("UseArmorControl")) return;
+		if (!plugin.getConfig().getBoolean("UseArmorControl"))
+			return;
 		// Player is not online for some reason
-		if (plugin.getServer().getPlayer(event.getPlayer().getName()) == null) return;
-	    Player player = plugin.getServer().getPlayer(event.getPlayer().getName());
-	    // Player hasn't got the correct permission
-	    if (player.hasPermission("armorcontrol.exempt")) return;
-	    
-	    plugin.setInventory(plugin.getServer().getPlayer(event.getPlayer().getName()).getInventory());
-	    plugin.getMethods().checkInventoryforArmor(player); 
+		if (plugin.getServer().getPlayer(event.getPlayer().getName()) == null)
+			return;
+		Player player = plugin.getServer().getPlayer(
+				event.getPlayer().getName());
+
+		// Is this world disabled
+		if (plugin.getWorldHandler().isDisabled(player.getWorld().getName()))
+			return;
+		// Player hasn't got the correct permission
+		if (player.hasPermission("armorcontrol.exempt"))
+			return;
+
+		plugin.setInventory(plugin.getServer()
+				.getPlayer(event.getPlayer().getName()).getInventory());
+		plugin.getMethods().checkInventoryforArmor(player);
 	}
 }

@@ -1,6 +1,7 @@
 package Staartvin.ArmorControl;
 
 import java.io.File;
+
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -11,6 +12,7 @@ import Staartvin.ArmorControl.Listeners.BlockBreakListener;
 import Staartvin.ArmorControl.Listeners.EntityBowListener;
 import Staartvin.ArmorControl.Listeners.EntityDamageListener;
 import Staartvin.ArmorControl.Listeners.InventoryListener;
+import Staartvin.ArmorControl.WorldHandler.WorldHandler;
 
 /**
  * @author Staartvin
@@ -29,6 +31,7 @@ public class ArmorControl extends JavaPlugin {
 	private Configuration config = new Configuration(this);
 	private CustomIDs customIDsClass = new CustomIDs(this);
 	private Levels levels = new Levels(this);
+	private WorldHandler worldHandler = new WorldHandler(this);
 	
 	protected FileConfiguration customIDsConfig;
 	protected File customIDsConfigFile;
@@ -103,5 +106,13 @@ public class ArmorControl extends JavaPlugin {
 
 	public void setLevels(Levels levels) {
 		this.levels = levels;
+	}
+
+	public WorldHandler getWorldHandler() {
+		return worldHandler;
+	}
+
+	public void setWorldHandler(WorldHandler worldHandler) {
+		this.worldHandler = worldHandler;
 	}
 }

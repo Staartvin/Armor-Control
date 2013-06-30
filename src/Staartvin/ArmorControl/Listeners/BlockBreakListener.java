@@ -17,12 +17,16 @@ public class BlockBreakListener implements Listener {
 	}
 	
 	@EventHandler
-	public void onToolUse(BlockBreakEvent event) {
+	public void onToolUse(BlockBreakEvent event) {		
 		if (!plugin.getConfig().getBoolean("UseToolControl")) return;
 		
 		// Player is not online for some reason
 		if (event.getPlayer() == null) return;
 	    Player player = event.getPlayer();
+	    
+	    // Is this world disabled
+	    if (plugin.getWorldHandler().isDisabled(player.getWorld().getName())) return;
+	    
 	    // Player has got the correct exempt permission
 	    if (player.hasPermission("toolcontrol.exempt")) return;
 	    int IDinHand = player.getItemInHand().getTypeId();

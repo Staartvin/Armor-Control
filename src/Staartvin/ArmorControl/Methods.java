@@ -70,6 +70,9 @@ public class Methods {
 		plugin.getConfig().addDefault("UseArmorControl", true);
 		plugin.getConfig().addDefault("UseToolControl", false);
 		plugin.getConfig().addDefault("UseWeaponControl", false);
+		
+		plugin.getConfig().addDefault("DisabledWorlds", new String[] {"DisabledWorld", "DisabledWorld_nether", "DisabledWorld_the_end"});
+		
 		plugin.getConfig().addDefault("Upgrade.12-to-13", true);
 
 		plugin.customIDsConfig.addDefault(
