@@ -41,10 +41,19 @@ public class API {
 		return plugin.getMethods().findLevel(mode, item);
 	}
 	
+	/**
+	 * Gets a list of disabled worlds
+	 * @return a list of disabled worlds
+	 */
 	public List<String> getDisabledWorlds() {
 		return plugin.getWorldHandler().getDisabledWorlds();
 	}
 	
+	/**
+	 * Check if a world is disabled
+	 * @param world World to check for
+	 * @return true if disabled, false otherwise.
+	 */
 	public boolean isDisabledWorld(String world) {
 		return plugin.getWorldHandler().isDisabled(world);
 	}
