@@ -84,9 +84,19 @@ public class Methods {
 		plugin.customIDsConfig.addDefault(
 				"Custom IDs.Tekkit_Red_Matter_Sword.Level", 10);
 
+		// Messages
 		plugin.getConfig()
-				.addDefault("Messages.NOT_ALLOWED_TO_WEAR",
+				.addDefault("Messages.NOT_ALLOWED_TO_WEAR_ARMOR",
 						"&4You cannot wear this %item%. You must be at least level: &6%level%");
+		plugin.getConfig()
+				.addDefault("Messages.NOT_ALLOWED_TO_USE_TOOL",
+						"&4You cannot use this tool! You must be at least level: &6%level%");
+		plugin.getConfig()
+				.addDefault("Messages.NOT_ALLOWED_TO_USE_WEAPON",
+						"&4You cannot use this weapon! You must be at least level: &6%level%");
+		plugin.getConfig()
+				.addDefault("Messages.NOT_ALLOWED_TO_SHOOT_BOW",
+						"&4You cannot use a bow! You must be at least level: &6%level%");
 
 		plugin.getConfig().options().copyDefaults(true);
 		plugin.saveConfig();
@@ -438,16 +448,16 @@ public class Methods {
 						player.getWorld().dropItem(player.getLocation(),
 								inv.getHelmet());
 					}
-					
+
 					player.sendMessage(plugin
 							.getMessageHandler()
-							.getMessage(message.NOT_ALLOWED_TO_WEAR)
+							.getMessage(message.NOT_ALLOWED_TO_WEAR_ARMOR)
 							.replace(
 									"%item%",
 									inv.getHelmet().getType().name()
 											.replace("_", " ").toLowerCase())
 							.replace("%level%", findLevel(mode, "armor") + ""));
-					
+
 					inv.setHelmet(null);
 					break;
 				} else {
@@ -508,16 +518,16 @@ public class Methods {
 						player.getWorld().dropItem(player.getLocation(),
 								inv.getChestplate());
 					}
-					
+
 					player.sendMessage(plugin
 							.getMessageHandler()
-							.getMessage(message.NOT_ALLOWED_TO_WEAR)
+							.getMessage(message.NOT_ALLOWED_TO_WEAR_ARMOR)
 							.replace(
 									"%item%",
 									inv.getChestplate().getType().name()
 											.replace("_", " ").toLowerCase())
 							.replace("%level%", findLevel(mode, "armor") + ""));
-					
+
 					inv.setChestplate(null);
 					break;
 				} else {
@@ -580,16 +590,16 @@ public class Methods {
 						player.getWorld().dropItem(player.getLocation(),
 								inv.getLeggings());
 					}
-					
+
 					player.sendMessage(plugin
 							.getMessageHandler()
-							.getMessage(message.NOT_ALLOWED_TO_WEAR)
+							.getMessage(message.NOT_ALLOWED_TO_WEAR_ARMOR)
 							.replace(
 									"%item%",
 									inv.getLeggings().getType().name()
 											.replace("_", " ").toLowerCase())
 							.replace("%level%", findLevel(mode, "armor") + ""));
-					
+
 					inv.setLeggings(null);
 					break;
 				} else {
@@ -650,16 +660,16 @@ public class Methods {
 						player.getWorld().dropItem(player.getLocation(),
 								inv.getBoots());
 					}
-					
+
 					player.sendMessage(plugin
 							.getMessageHandler()
-							.getMessage(message.NOT_ALLOWED_TO_WEAR)
+							.getMessage(message.NOT_ALLOWED_TO_WEAR_ARMOR)
 							.replace(
 									"%item%",
 									inv.getBoots().getType().name()
 											.replace("_", " ").toLowerCase())
 							.replace("%level%", findLevel(mode, "armor") + ""));
-					
+
 					inv.setBoots(null);
 					break;
 				} else {

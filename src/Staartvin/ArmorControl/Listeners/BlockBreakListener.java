@@ -1,12 +1,12 @@
 package Staartvin.ArmorControl.Listeners;
 
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 
 import Staartvin.ArmorControl.ArmorControl;
+import Staartvin.ArmorControl.Messages.MessageHandler.message;
 
 public class BlockBreakListener implements Listener {
 
@@ -46,7 +46,7 @@ public class BlockBreakListener implements Listener {
 	    	if (IDinHand == ID) {
 	    		if (!plugin.getMethods().checkLevel(player, "wood", "tool")) {
 	    			event.setCancelled(true);
-	    			player.sendMessage(ChatColor.RED + "You cannot use this tool! You must be at least level: " + plugin.getMethods().findLevel("wood", "tool"));
+	    			player.sendMessage(plugin.getMessageHandler().getMessage(message.NOT_ALLOWED_TO_USE_TOOL).replace("%level%", plugin.getMethods().findLevel("wood", "tool") + ""));
 	    		}
 	    	}
 	    }
@@ -56,7 +56,7 @@ public class BlockBreakListener implements Listener {
 	    	if (IDinHand == ID) {
 	    		if (!plugin.getMethods().checkLevel(player, "stone", "tool")) {
 	    			event.setCancelled(true);
-	    			player.sendMessage(ChatColor.RED + "You cannot use this tool! You must be at least level: " + plugin.getMethods().findLevel("stone", "tool"));
+	    			player.sendMessage(plugin.getMessageHandler().getMessage(message.NOT_ALLOWED_TO_USE_TOOL).replace("%level%", plugin.getMethods().findLevel("stone", "tool") + ""));
 	    		}
 	    	}
 	    }
@@ -66,7 +66,7 @@ public class BlockBreakListener implements Listener {
 	    	if (IDinHand == ID) {
 	    		if (!plugin.getMethods().checkLevel(player, "iron", "tool")) {
 	    			event.setCancelled(true);
-	    			player.sendMessage(ChatColor.RED + "You cannot use this tool! You must be at least level: " + plugin.getMethods().findLevel("iron", "tool"));
+	    			player.sendMessage(plugin.getMessageHandler().getMessage(message.NOT_ALLOWED_TO_USE_TOOL).replace("%level%", plugin.getMethods().findLevel("iron", "tool") + ""));
 	    		}
 	    	}
 	    }
@@ -76,7 +76,7 @@ public class BlockBreakListener implements Listener {
 	    	if (IDinHand == ID) {
 	    		if (!plugin.getMethods().checkLevel(player, "gold", "tool")) {
 	    			event.setCancelled(true);
-	    			player.sendMessage(ChatColor.RED + "You cannot use this tool! You must be at least level: " + plugin.getMethods().findLevel("gold", "tool"));
+	    			player.sendMessage(plugin.getMessageHandler().getMessage(message.NOT_ALLOWED_TO_USE_TOOL).replace("%level%", plugin.getMethods().findLevel("gold", "tool") + ""));
 	    		}
 	    	}
 	    }
@@ -86,7 +86,7 @@ public class BlockBreakListener implements Listener {
 	    	if (IDinHand == ID) {
 	    		if (!plugin.getMethods().checkLevel(player, "diamond", "tool")) {
 	    			event.setCancelled(true);
-	    			player.sendMessage(ChatColor.RED + "You cannot use this tool! You must be at least level: " + plugin.getMethods().findLevel("diamond", "tool"));
+	    			player.sendMessage(plugin.getMessageHandler().getMessage(message.NOT_ALLOWED_TO_USE_TOOL).replace("%level%", plugin.getMethods().findLevel("diamond", "tool") + ""));
 	    		}
 	    	}
 	    }

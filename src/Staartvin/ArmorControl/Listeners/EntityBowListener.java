@@ -1,12 +1,12 @@
 package Staartvin.ArmorControl.Listeners;
 
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
 
 import Staartvin.ArmorControl.ArmorControl;
+import Staartvin.ArmorControl.Messages.MessageHandler.message;
 
 public class EntityBowListener implements Listener {
 
@@ -34,9 +34,9 @@ public class EntityBowListener implements Listener {
 			return;
 
 		if (player.getLevel() < plugin.getLevels().getBowLevel()) {
-			player.sendMessage(ChatColor.RED
-					+ "You cannot use a bow! You must be at least level: "
-					+ plugin.getLevels().getBowLevel());
+			player.sendMessage(plugin.getMessageHandler()
+					.getMessage(message.NOT_ALLOWED_TO_SHOOT_BOW)
+					.replace("%level%", plugin.getLevels().getBowLevel() + ""));
 			event.setCancelled(true);
 		}
 	}
