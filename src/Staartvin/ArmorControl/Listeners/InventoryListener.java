@@ -31,9 +31,7 @@ public class InventoryListener implements Listener {
 		// Player hasn't got the correct permission
 		if (player.hasPermission("armorcontrol.exempt"))
 			return;
-
-		plugin.setInventory(plugin.getServer()
-				.getPlayer(event.getPlayer().getName()).getInventory());
+		
 		plugin.getMethods().checkInventoryforArmor(player);
 	}
 }
