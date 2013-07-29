@@ -1,9 +1,10 @@
 package Staartvin.ArmorControl;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+
+import Staartvin.ArmorControl.Messages.MessageHandler.message;
 
 /**
  * @author Staartvin
@@ -41,7 +42,7 @@ public class Methods {
 						+ plugin.getDescription().getVersion()
 						+ " Config"
 						+ "\nDo not touch the 'upgrade' part. It will mess up the config."
-						+ "\nLatest CraftBukkit version tested on: 1.4.7-R1.0 #2570"
+						+ "\nLatest CraftBukkit version tested on: 1.6.2-R0.1 #2820"
 						+ "\n\nThanks for using Armor Control! Questions? http://dev.bukkit.org/server-mods/armor-control/");
 
 		plugin.getConfig().addDefault("verboseLogging", true);
@@ -70,15 +71,22 @@ public class Methods {
 		plugin.getConfig().addDefault("UseArmorControl", true);
 		plugin.getConfig().addDefault("UseToolControl", false);
 		plugin.getConfig().addDefault("UseWeaponControl", false);
-		
-		plugin.getConfig().addDefault("DisabledWorlds", new String[] {"DisabledWorld", "DisabledWorld_nether", "DisabledWorld_the_end"});
-		
+
+		plugin.getConfig().addDefault(
+				"DisabledWorlds",
+				new String[] { "DisabledWorld", "DisabledWorld_nether",
+						"DisabledWorld_the_end" });
+
 		plugin.getConfig().addDefault("Upgrade.12-to-13", true);
 
 		plugin.customIDsConfig.addDefault(
 				"Custom IDs.Tekkit_Red_Matter_Sword.Data value", 27567);
 		plugin.customIDsConfig.addDefault(
 				"Custom IDs.Tekkit_Red_Matter_Sword.Level", 10);
+
+		plugin.getConfig()
+				.addDefault("Messages.NOT_ALLOWED_TO_WEAR",
+						"&4You cannot wear this %item%. You must be at least level: &6%level%");
 
 		plugin.getConfig().options().copyDefaults(true);
 		plugin.saveConfig();
@@ -388,37 +396,35 @@ public class Methods {
 	}
 
 	public void checkInventoryforArmor(Player player) {
-		if (plugin.getInventory().getHelmet() != null) {
+		PlayerInventory inv = player.getInventory();
+
+		if (inv.getHelmet() != null) {
 			for (int i = 0; i < plugin.getLevels().getHelmetIDs().length; i++) {
-				if (plugin.getLevels().getHelmetIDs()[i] == plugin
-						.getInventory().getHelmet().getType().getId()) {
+				if (plugin.getLevels().getHelmetIDs()[i] == inv.getHelmet()
+						.getTypeId()) {
 
 					String mode;
-					if (plugin.getInventory().getHelmet().getType().getId() == 298) {
+					if (inv.getHelmet().getType().getId() == 298) {
 						if (checkLevel(player, "leather", "armor")) {
 							break;
 						}
 						mode = "leather";
-					} else if (plugin.getInventory().getHelmet().getType()
-							.getId() == 302) {
+					} else if (inv.getHelmet().getType().getId() == 302) {
 						if (checkLevel(player, "chain", "armor")) {
 							break;
 						}
 						mode = "chain";
-					} else if (plugin.getInventory().getHelmet().getType()
-							.getId() == 306) {
+					} else if (inv.getHelmet().getType().getId() == 306) {
 						if (checkLevel(player, "iron", "armor")) {
 							break;
 						}
 						mode = "iron";
-					} else if (plugin.getInventory().getHelmet().getType()
-							.getId() == 310) {
+					} else if (inv.getHelmet().getType().getId() == 310) {
 						if (checkLevel(player, "diamond", "armor")) {
 							break;
 						}
 						mode = "diamond";
-					} else if (plugin.getInventory().getHelmet().getType()
-							.getId() == 314) {
+					} else if (inv.getHelmet().getType().getId() == 314) {
 						if (checkLevel(player, "gold", "armor")) {
 							break;
 						}
@@ -426,105 +432,69 @@ public class Methods {
 					} else {
 						break;
 					}
-					plugin.setArmorPart(new ItemStack(plugin.getInventory()
-							.getHelmet().getType().getId()));
-					plugin.getArmorPart().setDurability(
-							plugin.getInventory().getHelmet().getDurability());
-					if (plugin.getInventory().getHelmet().getEnchantments()
-							.size() != 0) {
-						try {
-							plugin.getArmorPart().addEnchantments(
-									plugin.getInventory().getHelmet()
-											.getEnchantments());
-						} catch (Exception e) {
-							plugin.getArmorPart().addUnsafeEnchantments(
-									plugin.getInventory().getHelmet()
-											.getEnchantments());
-						}
-					}
-					if (plugin.getInventory().firstEmpty() >= 0) {
-						plugin.getInventory().addItem(plugin.getArmorPart());
+					if (inv.firstEmpty() >= 0) {
+						inv.addItem(inv.getHelmet());
 					} else {
 						player.getWorld().dropItem(player.getLocation(),
-								plugin.getArmorPart());
+								inv.getHelmet());
 					}
-
-					plugin.getInventory().setHelmet(
-							new ItemStack(Material.AIR, 1));
-					player.sendMessage(ChatColor.RED
-							+ "You cannot wear this helmet. You must be at least level: "
-							+ findLevel(mode, "armor"));
+					
+					player.sendMessage(plugin
+							.getMessageHandler()
+							.getMessage(message.NOT_ALLOWED_TO_WEAR)
+							.replace(
+									"%item%",
+									inv.getHelmet().getType().name()
+											.replace("_", " ").toLowerCase())
+							.replace("%level%", findLevel(mode, "armor") + ""));
+					
+					inv.setHelmet(null);
 					break;
 				} else {
 					// Check for custom IDs
-					if (plugin.getMethods()
-							.isNotAllowedCustomID(
-									plugin.getInventory().getHelmet().getType()
-											.getId(), player)) {
-						plugin.setArmorPart(new ItemStack(plugin.getInventory()
-								.getHelmet().getType().getId()));
-
-						plugin.getArmorPart().setDurability(
-								plugin.getInventory().getHelmet()
-										.getDurability());
-						if (plugin.getInventory().getHelmet().getEnchantments()
-								.size() != 0) {
-							try {
-								plugin.getArmorPart().addEnchantments(
-										plugin.getInventory().getHelmet()
-												.getEnchantments());
-							} catch (Exception e) {
-								plugin.getArmorPart().addUnsafeEnchantments(
-										plugin.getInventory().getHelmet()
-												.getEnchantments());
-							}
-						}
-						if (plugin.getInventory().firstEmpty() >= 0) {
-							plugin.getInventory()
-									.addItem(plugin.getArmorPart());
+					if (plugin.getMethods().isNotAllowedCustomID(
+							inv.getHelmet().getTypeId(), player)) {
+						if (inv.firstEmpty() >= 0) {
+							inv.addItem(inv.getHelmet());
 						} else {
 							player.getWorld().dropItem(player.getLocation(),
-									plugin.getArmorPart());
+									inv.getHelmet());
 						}
 
-						plugin.getInventory().setHelmet(
-								new ItemStack(Material.AIR, 1));
+						// Remove helmet
+						inv.setHelmet(null);
 						break;
 					}
 				}
 			}
 		}
-		if (plugin.getInventory().getChestplate() != null) {
+		if (inv.getChestplate() != null) {
 			for (int i = 0; i < plugin.getLevels().getChestplateIDs().length; i++) {
-				if (plugin.getLevels().getChestplateIDs()[i] == plugin
-						.getInventory().getChestplate().getType().getId()) {
+				if (plugin.getLevels().getChestplateIDs()[i] == inv
+						.getChestplate().getTypeId()) {
 
 					String mode;
-					if (plugin.getInventory().getChestplate().getType().getId() == 299) {
+					if (inv.getChestplate().getType().getId() == 299) {
 						if (checkLevel(player, "leather", "armor")) {
 							break;
 						}
 						mode = "leather";
-					} else if (plugin.getInventory().getChestplate().getType()
-							.getId() == 303) {
+					} else if (inv.getChestplate().getType().getId() == 303) {
 						if (checkLevel(player, "chain", "armor")) {
 							break;
 						}
 						mode = "chain";
-					} else if (plugin.getInventory().getChestplate().getType()
-							.getId() == 307) {
+					} else if (inv.getChestplate().getType().getId() == 307) {
 						if (checkLevel(player, "iron", "armor")) {
 							break;
 						}
 						mode = "iron";
-					} else if (plugin.getInventory().getChestplate().getType()
-							.getId() == 311) {
+					} else if (inv.getChestplate().getType().getId() == 311) {
 						if (checkLevel(player, "diamond", "armor")) {
 							break;
 						}
 						mode = "diamond";
-					} else if (plugin.getInventory().getChestplate().getType()
-							.getId() == 315) {
+					} else if (inv.getChestplate().getType().getId() == 315) {
 						if (checkLevel(player, "gold", "armor")) {
 							break;
 						}
@@ -532,104 +502,70 @@ public class Methods {
 					} else {
 						break;
 					}
-					plugin.setArmorPart(new ItemStack(plugin.getInventory()
-							.getChestplate().getType().getId()));
-					plugin.getArmorPart().setDurability(
-							plugin.getInventory().getChestplate()
-									.getDurability());
-					if (plugin.getInventory().getChestplate().getEnchantments()
-							.size() != 0) {
-						try {
-							plugin.getArmorPart().addEnchantments(
-									plugin.getInventory().getChestplate()
-											.getEnchantments());
-						} catch (Exception e) {
-							plugin.getArmorPart().addUnsafeEnchantments(
-									plugin.getInventory().getChestplate()
-											.getEnchantments());
-						}
-					}
-					if (plugin.getInventory().firstEmpty() >= 0) {
-						plugin.getInventory().addItem(plugin.getArmorPart());
+					if (inv.firstEmpty() >= 0) {
+						inv.addItem(inv.getChestplate());
 					} else {
 						player.getWorld().dropItem(player.getLocation(),
-								plugin.getArmorPart());
+								inv.getChestplate());
 					}
-					plugin.getInventory().setChestplate(
-							new ItemStack(Material.AIR, 1));
-					player.sendMessage(ChatColor.RED
-							+ "You cannot wear this chestplate. You must be at least level: "
-							+ findLevel(mode, "armor"));
+					
+					player.sendMessage(plugin
+							.getMessageHandler()
+							.getMessage(message.NOT_ALLOWED_TO_WEAR)
+							.replace(
+									"%item%",
+									inv.getChestplate().getType().name()
+											.replace("_", " ").toLowerCase())
+							.replace("%level%", findLevel(mode, "armor") + ""));
+					
+					inv.setChestplate(null);
 					break;
 				} else {
 					// Check for custom IDs
-					if (plugin.getMethods()
-							.isNotAllowedCustomID(
-									plugin.getInventory().getChestplate().getType()
-											.getId(), player)) {
+					if (plugin.getMethods().isNotAllowedCustomID(
+							inv.getChestplate().getType().getId(), player)) {
 
-						plugin.setArmorPart(new ItemStack(plugin.getInventory()
-								.getChestplate().getType().getId()));
-						plugin.getArmorPart().setDurability(
-								plugin.getInventory().getChestplate()
-										.getDurability());
-						if (plugin.getInventory().getChestplate()
-								.getEnchantments().size() != 0) {
-							try {
-								plugin.getArmorPart().addEnchantments(
-										plugin.getInventory().getChestplate()
-												.getEnchantments());
-							} catch (Exception e) {
-								plugin.getArmorPart().addUnsafeEnchantments(
-										plugin.getInventory().getChestplate()
-												.getEnchantments());
-							}
-						}
-						if (plugin.getInventory().firstEmpty() >= 0) {
-							plugin.getInventory()
-									.addItem(plugin.getArmorPart());
+						if (inv.firstEmpty() >= 0) {
+							inv.addItem(inv.getChestplate());
 						} else {
 							player.getWorld().dropItem(player.getLocation(),
-									plugin.getArmorPart());
+									inv.getChestplate());
 						}
-						plugin.getInventory().setChestplate(
-								new ItemStack(Material.AIR, 1));
+
+						// Remove chestplate
+						inv.setChestplate(null);
 						break;
 					}
 				}
 			}
 		}
-		if (plugin.getInventory().getLeggings() != null) {
+		if (inv.getLeggings() != null) {
 			for (int i = 0; i < plugin.getLevels().getLeggingIDs().length; i++) {
-				if (plugin.getLevels().getLeggingIDs()[i] == plugin
-						.getInventory().getLeggings().getType().getId()) {
+				if (plugin.getLevels().getLeggingIDs()[i] == inv.getLeggings()
+						.getTypeId()) {
 
 					String mode;
-					if (plugin.getInventory().getLeggings().getType().getId() == 300) {
+					if (inv.getLeggings().getType().getId() == 300) {
 						if (checkLevel(player, "leather", "armor")) {
 							break;
 						}
 						mode = "leather";
-					} else if (plugin.getInventory().getLeggings().getType()
-							.getId() == 304) {
+					} else if (inv.getLeggings().getType().getId() == 304) {
 						if (checkLevel(player, "chain", "armor")) {
 							break;
 						}
 						mode = "chain";
-					} else if (plugin.getInventory().getLeggings().getType()
-							.getId() == 308) {
+					} else if (inv.getLeggings().getType().getId() == 308) {
 						if (checkLevel(player, "iron", "armor")) {
 							break;
 						}
 						mode = "iron";
-					} else if (plugin.getInventory().getLeggings().getType()
-							.getId() == 312) {
+					} else if (inv.getLeggings().getType().getId() == 312) {
 						if (checkLevel(player, "diamond", "armor")) {
 							break;
 						}
 						mode = "diamond";
-					} else if (plugin.getInventory().getLeggings().getType()
-							.getId() == 316) {
+					} else if (inv.getLeggings().getType().getId() == 316) {
 						if (checkLevel(player, "gold", "armor")) {
 							break;
 						}
@@ -637,103 +573,70 @@ public class Methods {
 					} else {
 						break;
 					}
-					plugin.setArmorPart(new ItemStack(plugin.getInventory()
-							.getLeggings().getType().getId()));
-					plugin.getArmorPart()
-							.setDurability(
-									plugin.getInventory().getLeggings()
-											.getDurability());
-					if (plugin.getInventory().getLeggings().getEnchantments()
-							.size() != 0) {
-						try {
-							plugin.getArmorPart().addEnchantments(
-									plugin.getInventory().getLeggings()
-											.getEnchantments());
-						} catch (Exception e) {
-							plugin.getArmorPart().addUnsafeEnchantments(
-									plugin.getInventory().getLeggings()
-											.getEnchantments());
-						}
-					}
-					if (plugin.getInventory().firstEmpty() >= 0) {
-						plugin.getInventory().addItem(plugin.getArmorPart());
+
+					if (inv.firstEmpty() >= 0) {
+						inv.addItem(inv.getLeggings());
 					} else {
 						player.getWorld().dropItem(player.getLocation(),
-								plugin.getArmorPart());
+								inv.getLeggings());
 					}
-					plugin.getInventory().setLeggings(
-							new ItemStack(Material.AIR, 1));
-					player.sendMessage(ChatColor.RED
-							+ "You cannot wear these leggings. You must be at least level: "
-							+ findLevel(mode, "armor"));
+					
+					player.sendMessage(plugin
+							.getMessageHandler()
+							.getMessage(message.NOT_ALLOWED_TO_WEAR)
+							.replace(
+									"%item%",
+									inv.getLeggings().getType().name()
+											.replace("_", " ").toLowerCase())
+							.replace("%level%", findLevel(mode, "armor") + ""));
+					
+					inv.setLeggings(null);
 					break;
 				} else {
 					// Check for custom IDs
-					if (plugin.getMethods()
-							.isNotAllowedCustomID(
-									plugin.getInventory().getLeggings().getType()
-											.getId(), player)) {
-						plugin.setArmorPart(new ItemStack(plugin.getInventory()
-								.getLeggings().getType().getId()));
-						plugin.getArmorPart()
-								.setDurability(
-										plugin.getInventory().getLeggings()
-												.getDurability());
-						if (plugin.getInventory().getLeggings().getEnchantments()
-								.size() != 0) {
-							try {
-								plugin.getArmorPart().addEnchantments(
-										plugin.getInventory().getLeggings()
-												.getEnchantments());
-							} catch (Exception e) {
-								plugin.getArmorPart().addUnsafeEnchantments(
-										plugin.getInventory().getLeggings()
-												.getEnchantments());
-							}
-						}
-						if (plugin.getInventory().firstEmpty() >= 0) {
-							plugin.getInventory().addItem(plugin.getArmorPart());
+					if (plugin.getMethods().isNotAllowedCustomID(
+							inv.getLeggings().getType().getId(), player)) {
+
+						if (inv.firstEmpty() >= 0) {
+							inv.addItem(inv.getLeggings());
 						} else {
 							player.getWorld().dropItem(player.getLocation(),
-									plugin.getArmorPart());
+									inv.getLeggings());
 						}
-						plugin.getInventory().setLeggings(
-								new ItemStack(Material.AIR, 1));
+
+						// Remove leggings
+						inv.setLeggings(null);
 					}
 				}
 			}
 		}
-		if (plugin.getInventory().getBoots() != null) {
+		if (inv.getBoots() != null) {
 			for (int i = 0; i < plugin.getLevels().getBootIDs().length; i++) {
-				if (plugin.getLevels().getBootIDs()[i] == plugin.getInventory()
-						.getBoots().getType().getId()) {
+				if (plugin.getLevels().getBootIDs()[i] == inv.getBoots()
+						.getTypeId()) {
 
 					String mode;
-					if (plugin.getInventory().getBoots().getType().getId() == 301) {
+					if (inv.getBoots().getType().getId() == 301) {
 						if (checkLevel(player, "leather", "armor")) {
 							break;
 						}
 						mode = "leather";
-					} else if (plugin.getInventory().getBoots().getType()
-							.getId() == 305) {
+					} else if (inv.getBoots().getType().getId() == 305) {
 						if (checkLevel(player, "chain", "armor")) {
 							break;
 						}
 						mode = "chain";
-					} else if (plugin.getInventory().getBoots().getType()
-							.getId() == 309) {
+					} else if (inv.getBoots().getType().getId() == 309) {
 						if (checkLevel(player, "iron", "armor")) {
 							break;
 						}
 						mode = "iron";
-					} else if (plugin.getInventory().getBoots().getType()
-							.getId() == 313) {
+					} else if (inv.getBoots().getType().getId() == 313) {
 						if (checkLevel(player, "diamond", "armor")) {
 							break;
 						}
 						mode = "diamond";
-					} else if (plugin.getInventory().getBoots().getType()
-							.getId() == 317) {
+					} else if (inv.getBoots().getType().getId() == 317) {
 						if (checkLevel(player, "gold", "armor")) {
 							break;
 						}
@@ -741,64 +644,36 @@ public class Methods {
 					} else {
 						break;
 					}
-					plugin.setArmorPart(new ItemStack(plugin.getInventory()
-							.getBoots().getType().getId()));
-					plugin.getArmorPart().setDurability(
-							plugin.getInventory().getBoots().getDurability());
-					if (plugin.getInventory().getBoots().getEnchantments()
-							.size() != 0) {
-						try {
-							plugin.getArmorPart().addEnchantments(
-									plugin.getInventory().getBoots()
-											.getEnchantments());
-						} catch (Exception e) {
-							plugin.getArmorPart().addUnsafeEnchantments(
-									plugin.getInventory().getBoots()
-											.getEnchantments());
-						}
-					}
-					if (plugin.getInventory().firstEmpty() >= 0) {
-						plugin.getInventory().addItem(plugin.getArmorPart());
+					if (inv.firstEmpty() >= 0) {
+						inv.addItem(inv.getBoots());
 					} else {
 						player.getWorld().dropItem(player.getLocation(),
-								plugin.getArmorPart());
+								inv.getBoots());
 					}
-					plugin.getInventory().setBoots(
-							new ItemStack(Material.AIR, 1));
-					player.sendMessage(ChatColor.RED
-							+ "You cannot wear these boots. You must be at least level: "
-							+ findLevel(mode, "armor"));
+					
+					player.sendMessage(plugin
+							.getMessageHandler()
+							.getMessage(message.NOT_ALLOWED_TO_WEAR)
+							.replace(
+									"%item%",
+									inv.getBoots().getType().name()
+											.replace("_", " ").toLowerCase())
+							.replace("%level%", findLevel(mode, "armor") + ""));
+					
+					inv.setBoots(null);
 					break;
 				} else {
 					// Check for custom IDs
-					if (plugin.getMethods()
-							.isNotAllowedCustomID(
-									plugin.getInventory().getBoots().getType()
-											.getId(), player)) {
-						plugin.setArmorPart(new ItemStack(plugin.getInventory()
-								.getBoots().getType().getId()));
-						plugin.getArmorPart().setDurability(
-								plugin.getInventory().getBoots().getDurability());
-						if (plugin.getInventory().getBoots().getEnchantments()
-								.size() != 0) {
-							try {
-								plugin.getArmorPart().addEnchantments(
-										plugin.getInventory().getBoots()
-												.getEnchantments());
-							} catch (Exception e) {
-								plugin.getArmorPart().addUnsafeEnchantments(
-										plugin.getInventory().getBoots()
-												.getEnchantments());
-							}
-						}
-						if (plugin.getInventory().firstEmpty() >= 0) {
-							plugin.getInventory().addItem(plugin.getArmorPart());
+					if (plugin.getMethods().isNotAllowedCustomID(
+							inv.getBoots().getType().getId(), player)) {
+
+						if (inv.firstEmpty() >= 0) {
+							inv.addItem(inv.getBoots());
 						} else {
 							player.getWorld().dropItem(player.getLocation(),
-									plugin.getArmorPart());
+									inv.getBoots());
 						}
-						plugin.getInventory().setBoots(
-								new ItemStack(Material.AIR, 1));
+						inv.setBoots(null);
 					}
 				}
 			}
@@ -806,7 +681,8 @@ public class Methods {
 	}
 
 	public boolean isNotAllowedCustomID(Integer IDinHand, Player player) {
-		if (!plugin.getConfig().getBoolean("Use custom IDs")) return false;
+		if (!plugin.getConfig().getBoolean("Use custom IDs"))
+			return false;
 
 		for (String id : plugin.getCustomIDClass().getCustomIDs()) {
 			String[] tempArray = id.split(":");
