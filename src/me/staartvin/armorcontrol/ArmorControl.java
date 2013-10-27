@@ -1,17 +1,18 @@
-package Staartvin.ArmorControl;
+package me.staartvin.armorcontrol;
 
 import java.io.File;
 
+import me.staartvin.armorcontrol.commands.Commands;
+import me.staartvin.armorcontrol.listeners.BlockBreakListener;
+import me.staartvin.armorcontrol.listeners.EntityBowListener;
+import me.staartvin.armorcontrol.listeners.EntityDamageListener;
+import me.staartvin.armorcontrol.listeners.InventoryListener;
+import me.staartvin.armorcontrol.messages.MessageHandler;
+import me.staartvin.armorcontrol.tasks.InventoryArmorTask;
+import me.staartvin.armorcontrol.worldhandler.WorldHandler;
+
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import Staartvin.ArmorControl.Commands.Commands;
-import Staartvin.ArmorControl.Listeners.BlockBreakListener;
-import Staartvin.ArmorControl.Listeners.EntityBowListener;
-import Staartvin.ArmorControl.Listeners.EntityDamageListener;
-import Staartvin.ArmorControl.Listeners.InventoryListener;
-import Staartvin.ArmorControl.Messages.MessageHandler;
-import Staartvin.ArmorControl.WorldHandler.WorldHandler;
 
 /**
  * @author Staartvin
@@ -45,11 +46,18 @@ public class ArmorControl extends JavaPlugin {
 		
 		getCommand("ac").setExecutor(new Commands(this));
 		
+		// Schedule new task to check for every player
+		new InventoryArmorTask(this).runTaskTimer(this, 100, 600);
+		
 		System.out.println("[" + getDescription().getName()
 				+ "] has been enabled!");
 	}
 
 	public void onDisable() {
+		
+		// Cancel all running tasks
+		getServer().getScheduler().cancelTasks(this);
+		
 		reloadConfig();
 		saveConfig();
 		config.reloadCustomIDsConfig();

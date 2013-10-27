@@ -1,12 +1,12 @@
-package Staartvin.ArmorControl.Listeners;
+package me.staartvin.armorcontrol.listeners;
+
+import me.staartvin.armorcontrol.ArmorControl;
+import me.staartvin.armorcontrol.messages.MessageHandler.message;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-
-import Staartvin.ArmorControl.ArmorControl;
-import Staartvin.ArmorControl.Messages.MessageHandler.message;
 
 public class BlockBreakListener implements Listener {
 
@@ -16,6 +16,7 @@ public class BlockBreakListener implements Listener {
 		this.plugin = plugin;
 	}
 	
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onToolUse(BlockBreakEvent event) {		
 		if (!plugin.getConfig().getBoolean("UseToolControl")) return;

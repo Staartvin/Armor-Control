@@ -1,8 +1,8 @@
-package Staartvin.ArmorControl.WorldHandler;
+package me.staartvin.armorcontrol.worldhandler;
 
 import java.util.List;
 
-import Staartvin.ArmorControl.ArmorControl;
+import me.staartvin.armorcontrol.ArmorControl;
 
 public class WorldHandler {
 

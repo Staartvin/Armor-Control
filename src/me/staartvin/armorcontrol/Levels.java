@@ -1,4 +1,4 @@
-package Staartvin.ArmorControl;
+package me.staartvin.armorcontrol;
 
 public class Levels {
 

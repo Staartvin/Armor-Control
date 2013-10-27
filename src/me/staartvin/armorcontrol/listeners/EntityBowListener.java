@@ -1,12 +1,12 @@
-package Staartvin.ArmorControl.Listeners;
+package me.staartvin.armorcontrol.listeners;
+
+import me.staartvin.armorcontrol.ArmorControl;
+import me.staartvin.armorcontrol.messages.MessageHandler.message;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
-
-import Staartvin.ArmorControl.ArmorControl;
-import Staartvin.ArmorControl.Messages.MessageHandler.message;
 
 public class EntityBowListener implements Listener {
 

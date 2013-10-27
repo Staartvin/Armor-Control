@@ -1,11 +1,11 @@
-package Staartvin.ArmorControl.Commands;
+package me.staartvin.armorcontrol.commands;
+
+import me.staartvin.armorcontrol.ArmorControl;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-
-import Staartvin.ArmorControl.ArmorControl;
 
 public class Commands implements CommandExecutor {
 

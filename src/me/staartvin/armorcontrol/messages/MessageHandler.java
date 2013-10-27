@@ -1,8 +1,8 @@
-package Staartvin.ArmorControl.Messages;
+package me.staartvin.armorcontrol.messages;
+
+import me.staartvin.armorcontrol.ArmorControl;
 
 import org.bukkit.ChatColor;
-
-import Staartvin.ArmorControl.ArmorControl;
 
 public class MessageHandler {
 

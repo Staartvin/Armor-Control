@@ -1,10 +1,10 @@
-package Staartvin.ArmorControl;
+package me.staartvin.armorcontrol;
+
+import me.staartvin.armorcontrol.messages.MessageHandler.message;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
-
-import Staartvin.ArmorControl.Messages.MessageHandler.message;
 
 /**
  * @author Staartvin
@@ -87,16 +87,16 @@ public class Methods {
 		// Messages
 		plugin.getConfig()
 				.addDefault("Messages.NOT_ALLOWED_TO_WEAR_ARMOR",
-						"&4You cannot wear this %item%. You must be at least level: &6%level%");
+						"&4You cannot wear this %item%. You must be at least level &6%level%");
 		plugin.getConfig()
 				.addDefault("Messages.NOT_ALLOWED_TO_USE_TOOL",
-						"&4You cannot use this tool! You must be at least level: &6%level%");
+						"&4You cannot use this tool! You must be at least level &6%level%");
 		plugin.getConfig()
 				.addDefault("Messages.NOT_ALLOWED_TO_USE_WEAPON",
-						"&4You cannot use this weapon! You must be at least level: &6%level%");
+						"&4You cannot use this weapon! You must be at least level &6%level%");
 		plugin.getConfig()
 				.addDefault("Messages.NOT_ALLOWED_TO_SHOOT_BOW",
-						"&4You cannot use a bow! You must be at least level: &6%level%");
+						"&4You cannot use a bow! You must be at least level &6%level%");
 
 		plugin.getConfig().options().copyDefaults(true);
 		plugin.saveConfig();
@@ -405,6 +405,7 @@ public class Methods {
 		return 0;
 	}
 
+	@SuppressWarnings("deprecation")
 	public void checkInventoryforArmor(Player player) {
 		PlayerInventory inv = player.getInventory();
 
