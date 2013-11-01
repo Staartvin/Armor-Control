@@ -2,7 +2,7 @@ name: Armor Control
 author: Staartvin
 website: http://dev.bukkit.org/server-mods/armor-control/
 main: me.staartvin.armorcontrol.ArmorControl
-version: 1.5
+version: 1.5.1
 description: Control players on wearing armor or using weapons/tools by experience.
 permissions:
     armorcontrol.exempt:
