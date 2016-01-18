@@ -28,6 +28,7 @@ public class Configuration {
 		// Look for defaults in the jar
 		InputStream defConfigStream = plugin.getResource("customIDs.yml");
 		if (defConfigStream != null) {
+			@SuppressWarnings("deprecation")
 			YamlConfiguration defConfig = YamlConfiguration
 					.loadConfiguration(defConfigStream);
 			plugin.customIDsConfig.setDefaults(defConfig);
