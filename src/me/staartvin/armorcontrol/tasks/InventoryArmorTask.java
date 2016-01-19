@@ -14,20 +14,14 @@ public class InventoryArmorTask extends BukkitRunnable {
 	}
 	
 	@Override
-	public void run() {
-		if (!plugin.getConfig().getBoolean("UseArmorControl"))
-			return;
-		
+	public void run() {	
 		for (Player player: plugin.getServer().getOnlinePlayers()) {
 
-			// Is this world disabled
-			if (plugin.getWorldHandler().isDisabled(player.getWorld().getName()))
-				return;
 			// Player has got exempt permission
 			if (player.hasPermission("armorcontrol.exempt"))
 				return;
 
-			plugin.getMethods().checkInventoryforArmor(player);
+			plugin.getResManager().checkArmor(player);
 			
 		}	
 	}
