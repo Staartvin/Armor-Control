@@ -129,8 +129,7 @@ public class RestrictionsManager {
 
 				this.giveItem(player, item);
 
-				player.sendMessage(
-						plugin.getConfigHandler().getMessage(message.NOT_ALLOWED_TO_WEAR_ARMOR, requiredLevel + ""));
+				plugin.getMessageHandler().sendMessage(player, plugin.getConfigHandler().getMessage(message.NOT_ALLOWED_TO_WEAR_ARMOR, requiredLevel + ""));
 			}
 		}
 	}
