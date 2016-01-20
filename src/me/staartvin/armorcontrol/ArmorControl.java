@@ -5,7 +5,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import me.staartvin.armorcontrol.api.API;
 import me.staartvin.armorcontrol.commands.Commands;
 import me.staartvin.armorcontrol.config.ConfigHandler;
+import me.staartvin.armorcontrol.listeners.PlayerInteractEntityListener;
 import me.staartvin.armorcontrol.listeners.PlayerInteractListener;
+import me.staartvin.armorcontrol.messagehandler.MessageHandler;
 import me.staartvin.armorcontrol.restrictions.RestrictionsManager;
 import me.staartvin.armorcontrol.tasks.InventoryArmorTask;
 
@@ -17,6 +19,7 @@ public class ArmorControl extends JavaPlugin {
 
 	private API api = new API(this);
 	private RestrictionsManager resManager = new RestrictionsManager(this);
+	private MessageHandler messageHandler = new MessageHandler(this);
 
 	private ConfigHandler configHandler;
 
@@ -43,6 +46,7 @@ public class ArmorControl extends JavaPlugin {
 	
 	private void registerListeners() {
 		this.getServer().getPluginManager().registerEvents(new PlayerInteractListener(this), this);
+		this.getServer().getPluginManager().registerEvents(new PlayerInteractEntityListener(this), this);
 	}
 
 	public void onDisable() {
@@ -91,5 +95,13 @@ public class ArmorControl extends JavaPlugin {
 
 	public void setResManager(RestrictionsManager resManager) {
 		this.resManager = resManager;
+	}
+
+	public MessageHandler getMessageHandler() {
+		return messageHandler;
+	}
+
+	public void setMessageHandler(MessageHandler messageHandler) {
+		this.messageHandler = messageHandler;
 	}
 }
