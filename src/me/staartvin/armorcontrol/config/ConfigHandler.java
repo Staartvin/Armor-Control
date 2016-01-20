@@ -16,7 +16,7 @@ public class ConfigHandler {
 	}
 
 	public static enum actionType {
-		LEFT_CLICK_AIR, RIGHT_CLICK_AIR, LEFT_CLICK_BLOCK, RIGHT_CLICK_BLOCK, LEFT_CLICK_MOB, RIGHT_CLICK_MOB, WEAR
+		LEFT_CLICK_AIR, RIGHT_CLICK_AIR, LEFT_CLICK_BLOCK, RIGHT_CLICK_BLOCK, LEFT_CLICK_MOB, RIGHT_CLICK_MOB, WEAR, LEFT_CLICK_PLAYER, RIGHT_CLICK_PLAYER
 	};
 
 	public ConfigHandler(ArmorControl instance) {
@@ -46,11 +46,11 @@ public class ConfigHandler {
 
 		// Messages
 		plugin.getConfig().addDefault("Messages." + message.NOT_ALLOWED_TO_WEAR_ARMOR.toString(),
-				"&4You cannot wear this item! You must be at least level &6{0}.");
+				"&cYou cannot wear this item! You must be at least level &6{0}.");
 		plugin.getConfig().addDefault("Messages." + message.NOT_ALLOWED_TO_USE.toString(),
-				"&4You cannot use this item! You must be at least level &6{0}.");
+				"&cYou cannot use this item this way! ({0}) You must be at least level &6{1}.");
 		plugin.getConfig().addDefault("Messages." + message.NOT_ALLOWED_TO_SHOOT_BOW.toString(),
-				"&4You cannot use a bow! You must be at least level &6{0}");
+				"&cYou cannot use a bow! You must be at least level &6{0}");
 
 		plugin.getConfig().options().copyDefaults(true);
 		plugin.saveConfig();
