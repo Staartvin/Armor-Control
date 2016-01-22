@@ -47,6 +47,7 @@ public class Commands implements CommandExecutor {
 				plugin.reloadConfig();
 				
 				plugin.getConfigHandler().loadFiles();
+				plugin.getResManager().loadRestrictions();
 
 				sender.sendMessage(ChatColor.GREEN
 						+ "Armor Control has been successfully reloaded!");
