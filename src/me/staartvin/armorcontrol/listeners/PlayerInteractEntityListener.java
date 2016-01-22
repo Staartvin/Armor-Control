@@ -1,5 +1,6 @@
 package me.staartvin.armorcontrol.listeners;
 
+import org.bukkit.GameMode;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,12 +24,18 @@ public class PlayerInteractEntityListener implements Listener {
 	public void onInteract(PlayerInteractEntityEvent event) {
 
 		Player player = event.getPlayer();
+		
+		String worldName = player.getLocation().getWorld().getName();
 
 		// We do not have to check on this world.
-		if (plugin.getAPI().isDisabledWorld(player.getLocation().getWorld().getName()))
+		if (plugin.getAPI().isDisabledWorld(worldName))
 			return;
 
-		System.out.println(event.getPlayer().getName() + " clicked " + event.getRightClicked());
+		// Ignore creative?
+		if (plugin.getConfigHandler().shouldIgnoreCreative()) {
+			if (player.getGameMode().equals(GameMode.CREATIVE))
+				return;
+		}
 
 		actionType action = actionType.RIGHT_CLICK_MOB;
 
@@ -46,11 +53,13 @@ public class PlayerInteractEntityListener implements Listener {
 		String blockAction = action.toString();
 
 		int requiredLevel = 0;
-		System.out.println("------------------------");
 
 		requiredLevel = plugin.getResManager().getRequiredLevel(item, action);
 
-		System.out.println("Required level: " + requiredLevel);
+		// Check if restrictions are disabled on this world.
+		if (plugin.getAPI().isDisabledWorld(item, worldName)) {
+			return;
+		}
 
 		// Required level is 0.
 		if (requiredLevel <= 0)
@@ -62,8 +71,6 @@ public class PlayerInteractEntityListener implements Listener {
 					plugin.getConfigHandler().getMessage(message.NOT_ALLOWED_TO_USE, blockAction, requiredLevel + ""));
 
 			event.setCancelled(true);
-
-			System.out.println("Event (mob click) is cancelled.");
 		}
 	}
 }

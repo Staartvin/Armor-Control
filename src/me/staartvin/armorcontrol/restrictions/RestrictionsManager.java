@@ -3,6 +3,7 @@ package me.staartvin.armorcontrol.restrictions;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -18,10 +19,7 @@ public class RestrictionsManager {
 	private List<Restriction> restrictions = new ArrayList<Restriction>();
 
 	public static enum actionType {
-		LEFT_CLICK_AIR, RIGHT_CLICK_AIR, LEFT_CLICK_BLOCK,
-		RIGHT_CLICK_BLOCK, LEFT_CLICK_MOB, RIGHT_CLICK_MOB,
-		WEAR, LEFT_CLICK_PLAYER, RIGHT_CLICK_PLAYER,
-		SHOOT_BOW
+		LEFT_CLICK_AIR, RIGHT_CLICK_AIR, LEFT_CLICK_BLOCK, RIGHT_CLICK_BLOCK, LEFT_CLICK_MOB, RIGHT_CLICK_MOB, WEAR, LEFT_CLICK_PLAYER, RIGHT_CLICK_PLAYER, SHOOT_BOW
 	};
 
 	public RestrictionsManager(ArmorControl instance) {
@@ -29,6 +27,9 @@ public class RestrictionsManager {
 	}
 
 	public void loadRestrictions() {
+		// Clear res.
+		restrictions.clear();
+		
 		List<String> items = plugin.getConfigHandler().getRestrictedItems();
 
 		int count = 0;
@@ -43,7 +44,7 @@ public class RestrictionsManager {
 			if (itemID < 0) {
 				continue;
 			}
-			
+
 			@SuppressWarnings("deprecation")
 			ItemStack itemStack = new ItemStack(itemID, 1, (short) dataValue);
 
@@ -58,11 +59,11 @@ public class RestrictionsManager {
 			if (dataValue >= 0) {
 				r.setDataValue(dataValue);
 			}
-			
+
 			List<String> disabledWorlds = plugin.getConfigHandler().getDisabledWorlds(itemStack);
-			
+
 			// Add disabled worlds
-			for (String world: disabledWorlds) {
+			for (String world : disabledWorlds) {
 				r.addDisabledWorld(world);
 			}
 
@@ -70,8 +71,6 @@ public class RestrictionsManager {
 			restrictions.add(r);
 
 			count++;
-
-			System.out.println("Registered " + itemID + ";" + dataValue + ", " + r.toString());
 		}
 
 		plugin.debugMessage("Loaded " + count + " restrictions!");
@@ -83,16 +82,8 @@ public class RestrictionsManager {
 			if (entry.getItemID() != itemID)
 				continue;
 
-			System.out.println("Res: " + entry);
-			System.out.println("ItemID: " + itemID);
-
-			System.out.println("Data value: " + dataValue);
-			System.out.println("Data value of check: " + entry.getDataValue());
-
 			if (!entry.hasEqualDataValue(dataValue))
 				continue;
-
-			System.out.println("EQUAL!");
 
 			return entry.getActionLevel(type);
 		}
@@ -103,7 +94,7 @@ public class RestrictionsManager {
 	@SuppressWarnings("deprecation")
 	public int getRequiredLevel(ItemStack item, actionType type) {
 
-		int dataValue = 0;
+		int dataValue = item.getDurability();
 
 		if (shouldIgnoreDataValue(item) || item.getDurability() == 0) {
 			dataValue = -1;
@@ -112,11 +103,21 @@ public class RestrictionsManager {
 		return this.getRequiredLevel(item.getTypeId(), dataValue, type);
 	}
 
-	@SuppressWarnings("deprecation")
 	public void checkArmor(Player player) {
 		// Check if player is wearing restricted items
 		PlayerInventory inv = player.getInventory();
 
+		// We do not have to check on this world.
+		if (plugin.getAPI().isDisabledWorld(player.getLocation().getWorld().getName()))
+			return;
+
+		// Ignore creative?
+		if (plugin.getConfigHandler().shouldIgnoreCreative()) {
+			if (player.getGameMode().equals(GameMode.CREATIVE))
+				return;
+		}
+
+		@SuppressWarnings("unused")
 		int itemID = 0, dataValue = 0;
 		ItemStack item;
 
@@ -129,14 +130,14 @@ public class RestrictionsManager {
 			if (item == null)
 				continue;
 
-			itemID = item.getTypeId();
-			dataValue = item.getDurability();
+			// itemID = item.getTypeId();
+			// dataValue = item.getDurability();
 
 			if (dataValue == 0) {
 				dataValue = -1;
 			}
 
-			int requiredLevel = plugin.getResManager().getRequiredLevel(itemID, dataValue, type);
+			int requiredLevel = plugin.getResManager().getRequiredLevel(item, type);
 
 			// Cannot wear this item
 			if (player.getLevel() < requiredLevel) {

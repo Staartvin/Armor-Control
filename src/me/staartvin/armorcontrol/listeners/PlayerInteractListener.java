@@ -1,5 +1,6 @@
 package me.staartvin.armorcontrol.listeners;
 
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,10 +26,18 @@ public class PlayerInteractListener implements Listener {
 	public void onInteract(PlayerInteractEvent event) {
 
 		Player player = event.getPlayer();
+		
+		String worldName = player.getLocation().getWorld().getName();
 
 		// We do not have to check on this world.
-		if (plugin.getAPI().isDisabledWorld(player.getLocation().getWorld().getName()))
+		if (plugin.getAPI().isDisabledWorld(worldName))
 			return;
+
+		// Ignore creative?
+		if (plugin.getConfigHandler().shouldIgnoreCreative()) {
+			if (player.getGameMode().equals(GameMode.CREATIVE))
+				return;
+		}
 
 		ItemStack item = event.getItem();
 
@@ -37,7 +46,6 @@ public class PlayerInteractListener implements Listener {
 			return;
 
 		int requiredLevel = 0;
-		System.out.println("------------------------");
 
 		actionType type = null;
 
@@ -89,7 +97,10 @@ public class PlayerInteractListener implements Listener {
 
 		requiredLevel = plugin.getResManager().getRequiredLevel(item, type);
 
-		System.out.println("Required level: " + requiredLevel);
+		// Check if restrictions are disabled on this world.
+		if (plugin.getAPI().isDisabledWorld(item, worldName)) {
+			return;
+		}
 
 		// Required level is 0.
 		if (requiredLevel <= 0)
@@ -101,8 +112,6 @@ public class PlayerInteractListener implements Listener {
 					.getMessage(message.NOT_ALLOWED_TO_USE, type.toString(), requiredLevel + ""));
 
 			event.setCancelled(true);
-
-			System.out.println("Event is cancelled.");
 		}
 	}
 

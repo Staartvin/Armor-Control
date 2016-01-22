@@ -1,5 +1,6 @@
 package me.staartvin.armorcontrol.listeners;
 
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,16 +26,29 @@ public class EntityBowListener implements Listener {
 			return;
 
 		Player player = (Player) event.getEntity();
+		
+		String worldName = player.getLocation().getWorld().getName();
 
 		// We do not have to check on this world.
-		if (plugin.getAPI().isDisabledWorld(player.getLocation().getWorld().getName()))
+		if (plugin.getAPI().isDisabledWorld(worldName))
 			return;
+
+		// Ignore creative?
+		if (plugin.getConfigHandler().shouldIgnoreCreative()) {
+			if (player.getGameMode().equals(GameMode.CREATIVE))
+				return;
+		}
 
 		ItemStack bow = event.getBow();
 
 		actionType action = actionType.SHOOT_BOW;
 
 		int requiredLevel = plugin.getResManager().getRequiredLevel(bow, action);
+		
+		// Check if restrictions are disabled on this world.
+		if (plugin.getAPI().isDisabledWorld(bow, worldName)) {
+			return;
+		}
 
 		// Player does not have the sufficient level
 		if (requiredLevel > player.getLevel()) {
@@ -42,8 +56,6 @@ public class EntityBowListener implements Listener {
 					plugin.getConfigHandler().getMessage(message.NOT_ALLOWED_TO_SHOOT_BOW, requiredLevel + ""));
 
 			event.setCancelled(true);
-
-			System.out.println("Shoot bow is cancelled.");
 		}
 	}
 }

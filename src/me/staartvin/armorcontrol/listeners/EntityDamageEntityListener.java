@@ -1,5 +1,6 @@
 package me.staartvin.armorcontrol.listeners;
 
+import org.bukkit.GameMode;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -24,17 +25,24 @@ public class EntityDamageEntityListener implements Listener {
 	public void onInteract(EntityDamageByEntityEvent event) {
 
 		Entity attacker = event.getDamager();
-		
+
 		// Attacker is not a player.
-		if (!attacker.getType().equals(EntityType.PLAYER)) return;
+		if (!attacker.getType().equals(EntityType.PLAYER))
+			return;
+		
+		String worldName = attacker.getLocation().getWorld().getName();
 
 		// We do not have to check on this world.
-		if (plugin.getAPI().isDisabledWorld(attacker.getLocation().getWorld().getName()))
+		if (plugin.getAPI().isDisabledWorld(worldName))
 			return;
 
 		Player player = (Player) attacker;
-		
-		System.out.println(player.getName() + " attacked " + event.getEntity());
+
+		// Ignore creative?
+		if (plugin.getConfigHandler().shouldIgnoreCreative()) {
+			if (player.getGameMode().equals(GameMode.CREATIVE))
+				return;
+		}
 
 		actionType action = actionType.LEFT_CLICK_MOB;
 
@@ -52,11 +60,13 @@ public class EntityDamageEntityListener implements Listener {
 		String blockAction = action.toString();
 
 		int requiredLevel = 0;
-		System.out.println("------------------------");
 
 		requiredLevel = plugin.getResManager().getRequiredLevel(item, action);
 
-		System.out.println("Required level: " + requiredLevel);
+		// Check if restrictions are disabled on this world.
+		if (plugin.getAPI().isDisabledWorld(item, worldName)) {
+			return;
+		}
 
 		// Required level is 0.
 		if (requiredLevel <= 0)
@@ -68,8 +78,6 @@ public class EntityDamageEntityListener implements Listener {
 					plugin.getConfigHandler().getMessage(message.NOT_ALLOWED_TO_USE, blockAction, requiredLevel + ""));
 
 			event.setCancelled(true);
-
-			System.out.println("Event (mob attack) is cancelled.");
 		}
 	}
 }

@@ -35,9 +35,10 @@ public class ConfigHandler {
 				.header("ArmorControl v" + plugin.getDescription()
 						.getVersion() + " Config" + "\nDo not touch the 'upgrade' part. It will mess up the config."
 				+ "\nLatest Spigot version tested on: 1.8.8"
-				+ "\n\nThanks for using Armor Control! Questions? http://dev.bukkit.org/server-mods/armor-control/");
+				+ "\n\nThanks for using Armor Control! Questions? Go to the Spigot thread!");
 
 		plugin.getConfig().addDefault("verboseLogging", true);
+		plugin.getConfig().addDefault("ignore creative", true);
 
 		// Disabled worlds
 		plugin.getConfig().addDefault("Disabled Worlds",
@@ -192,6 +193,10 @@ public class ConfigHandler {
 
 	public boolean verboseLoggingEnabled() {
 		return plugin.getConfig().getBoolean("verboseLogging");
+	}
+	
+	public boolean shouldIgnoreCreative() {
+		return plugin.getConfig().getBoolean("ignore creative");
 	}
 
 }
