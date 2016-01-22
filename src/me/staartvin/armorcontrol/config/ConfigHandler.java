@@ -3,7 +3,10 @@ package me.staartvin.armorcontrol.config;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.inventory.ItemStack;
+
 import me.staartvin.armorcontrol.ArmorControl;
+import me.staartvin.armorcontrol.restrictions.RestrictionsManager.actionType;
 import net.md_5.bungee.api.ChatColor;
 
 public class ConfigHandler {
@@ -15,20 +18,16 @@ public class ConfigHandler {
 		NOT_ALLOWED_TO_WEAR_ARMOR, NOT_ALLOWED_TO_USE, NOT_ALLOWED_TO_SHOOT_BOW
 	}
 
-	public static enum actionType {
-		LEFT_CLICK_AIR, RIGHT_CLICK_AIR, LEFT_CLICK_BLOCK, RIGHT_CLICK_BLOCK, LEFT_CLICK_MOB, RIGHT_CLICK_MOB, WEAR, LEFT_CLICK_PLAYER, RIGHT_CLICK_PLAYER
-	};
-
 	public ConfigHandler(ArmorControl instance) {
 		plugin = instance;
 		restrictionsConfig = new Configuration(instance);
-		
+
 		this.restrictionsConfig.reloadConfig();
 		instance.reloadConfig();
 	}
 
 	public void loadFiles() {
-		
+
 		// Load restrictions config.
 		this.restrictionsConfig.loadConfig();
 
@@ -77,8 +76,26 @@ public class ConfigHandler {
 
 		return this.restrictionsConfig.getConfig().getInt(itemName + ".actions." + typeString, 0);
 	}
+	
+	public int getActionLevel(ItemStack item, actionType type) {
+		// Get the level of an item for a particular action
 
-	public String findItemName(int itemID, int dataValue) {
+		// Invalid action type
+		if (type == null)
+			return 0;
+
+		String itemName = this.findItemName(item);
+
+		// No restriction for this item
+		if (itemName == null)
+			return 0;
+
+		String typeString = type.toString().toLowerCase().replace("_", " ");
+
+		return this.restrictionsConfig.getConfig().getInt(itemName + ".actions." + typeString, 0);
+	}
+
+	private String findItemName(int itemID, int dataValue) {
 		// Used to find the name in the config so we can grab data of off it.
 
 		for (String name : this.restrictionsConfig.getConfig().getKeys(false)) {
@@ -90,10 +107,28 @@ public class ConfigHandler {
 		return null;
 	}
 
+	@SuppressWarnings("deprecation")
+	public String findItemName(ItemStack item) {
+		// Used to find the name in the config so we can grab data of off it.
+		int dataValue = item.getDurability();
+
+		if (plugin.getResManager().shouldIgnoreDataValue(item) || item.getDurability() == 0) {
+			dataValue = -1;
+		}
+
+		for (String name : this.restrictionsConfig.getConfig().getKeys(false)) {
+			if (this.getItemID(name) == item.getTypeId() && this.getDataValue(name) == dataValue) {
+				return name;
+			}
+		}
+
+		return null;
+	}
+
 	public int getItemID(String name) {
 		if (name == null)
 			return -1;
-		
+
 		return this.restrictionsConfig.getConfig().getInt(name + ".item id", -1);
 	}
 
@@ -117,20 +152,44 @@ public class ConfigHandler {
 	}
 
 	public String getMessage(message mess, String... strings) {
-		
+
 		String message = plugin.getConfig().getString("Messages." + mess.toString());
-		
-		for (int i=0;i<strings.length;i++) {
+
+		for (int i = 0; i < strings.length; i++) {
 			message = message.replace("{" + i + "}", strings[i]);
 		}
-		
+
 		return ChatColor.translateAlternateColorCodes('&', message);
 	}
-	
+
+	private List<String> getDisabledWorlds(String name) {
+		return this.restrictionsConfig.getConfig().getStringList(name + ".disabled worlds");
+	}
+
+	public List<String> getDisabledWorlds(ItemStack item) {
+		List<String> worlds = new ArrayList<String>();
+
+		// Add worlds that are disabled by default (in the configuration)
+		for (String world : this.getDisabledWorlds()) {
+			worlds.add(world);
+		}
+		
+		String name = this.findItemName(item);
+		
+		// If name was found, add extra disabled worlds that are specific to the item.
+		if (name != null) {
+			for (String world: this.getDisabledWorlds(name)) {
+				worlds.add(world);
+			}
+		}
+		
+		return worlds;
+	}
+
 	public List<String> getDisabledWorlds() {
 		return plugin.getConfig().getStringList("Disabled Worlds");
 	}
-	
+
 	public boolean verboseLoggingEnabled() {
 		return plugin.getConfig().getBoolean("verboseLogging");
 	}

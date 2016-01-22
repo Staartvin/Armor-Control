@@ -1,42 +1,49 @@
 package me.staartvin.armorcontrol.listeners;
 
-import me.staartvin.armorcontrol.ArmorControl;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.inventory.ItemStack;
+
+import me.staartvin.armorcontrol.ArmorControl;
+import me.staartvin.armorcontrol.config.ConfigHandler.message;
+import me.staartvin.armorcontrol.restrictions.RestrictionsManager.actionType;
 
 public class EntityBowListener implements Listener {
 
-//	ArmorControl plugin;
-//
-//	public EntityBowListener(ArmorControl plugin) {
-//		this.plugin = plugin;
-//	}
-//
-//	@EventHandler
-//	public void onBowUse(EntityShootBowEvent event) {
-//		if (!plugin.getConfig().getBoolean("UseWeaponControl"))
-//			return;
-//		// Entity is not a player
-//		if (!(event.getEntity() instanceof Player))
-//			return;
-//		Player player = (Player) event.getEntity();
-//
-//		// Is this world disabled
-//		if (plugin.getWorldHandler().isDisabled(player.getWorld().getName()))
-//			return;
-//
-//		// Player hasn't got the correct permission
-//		if (player.hasPermission("weaponcontrol.exempt"))
-//			return;
-//
-//		if (player.getLevel() < plugin.getLevels().getBowLevel()) {
-//			player.sendMessage(plugin.getMessageHandler()
-//					.getMessage(message.NOT_ALLOWED_TO_SHOOT_BOW)
-//					.replace("%level%", plugin.getLevels().getBowLevel() + ""));
-//			event.setCancelled(true);
-//		}
-//	}
+	ArmorControl plugin;
+
+	public EntityBowListener(ArmorControl plugin) {
+		this.plugin = plugin;
+	}
+
+	@EventHandler
+	public void onBowUse(EntityShootBowEvent event) {
+		// Entity is not a player
+		if (!(event.getEntity() instanceof Player))
+			return;
+
+		Player player = (Player) event.getEntity();
+
+		// We do not have to check on this world.
+		if (plugin.getAPI().isDisabledWorld(player.getLocation().getWorld().getName()))
+			return;
+
+		ItemStack bow = event.getBow();
+
+		actionType action = actionType.SHOOT_BOW;
+
+		int requiredLevel = plugin.getResManager().getRequiredLevel(bow, action);
+
+		// Player does not have the sufficient level
+		if (requiredLevel > player.getLevel()) {
+			plugin.getMessageHandler().sendMessage(player,
+					plugin.getConfigHandler().getMessage(message.NOT_ALLOWED_TO_SHOOT_BOW, requiredLevel + ""));
+
+			event.setCancelled(true);
+
+			System.out.println("Shoot bow is cancelled.");
+		}
+	}
 }

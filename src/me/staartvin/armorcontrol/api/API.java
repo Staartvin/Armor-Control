@@ -6,7 +6,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import me.staartvin.armorcontrol.ArmorControl;
-import me.staartvin.armorcontrol.config.ConfigHandler.actionType;
+import me.staartvin.armorcontrol.restrictions.RestrictionsManager.actionType;
+
 
 public class API {
 
@@ -47,5 +48,15 @@ public class API {
 	 */
 	public boolean isDisabledWorld(String worldName) {
 		return this.getDisabledWorlds().contains(worldName);
+	}
+	
+	/**
+	 * Check if the restrictions on an item are disabled on a specific world.
+	 * @param item Item to check for.
+	 * @param worldName Name of the world to check.
+	 * @return true if the restrictions of this item are not enabled on the given world; false otherwise.
+	 */
+	public boolean isDisabledWorld(ItemStack item, String worldName) {
+		return plugin.getConfigHandler().getDisabledWorlds(item).contains(worldName);
 	}
 }

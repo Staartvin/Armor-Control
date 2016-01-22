@@ -5,6 +5,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import me.staartvin.armorcontrol.api.API;
 import me.staartvin.armorcontrol.commands.Commands;
 import me.staartvin.armorcontrol.config.ConfigHandler;
+import me.staartvin.armorcontrol.listeners.EntityBowListener;
+import me.staartvin.armorcontrol.listeners.EntityDamageEntityListener;
 import me.staartvin.armorcontrol.listeners.PlayerInteractEntityListener;
 import me.staartvin.armorcontrol.listeners.PlayerInteractListener;
 import me.staartvin.armorcontrol.messagehandler.MessageHandler;
@@ -47,6 +49,8 @@ public class ArmorControl extends JavaPlugin {
 	private void registerListeners() {
 		this.getServer().getPluginManager().registerEvents(new PlayerInteractListener(this), this);
 		this.getServer().getPluginManager().registerEvents(new PlayerInteractEntityListener(this), this);
+		this.getServer().getPluginManager().registerEvents(new EntityDamageEntityListener(this), this);
+		this.getServer().getPluginManager().registerEvents(new EntityBowListener(this), this);
 	}
 
 	public void onDisable() {

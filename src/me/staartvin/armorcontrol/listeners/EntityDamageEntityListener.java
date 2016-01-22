@@ -1,40 +1,46 @@
 package me.staartvin.armorcontrol.listeners;
 
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
 import me.staartvin.armorcontrol.ArmorControl;
 import me.staartvin.armorcontrol.config.ConfigHandler.message;
 import me.staartvin.armorcontrol.restrictions.RestrictionsManager.actionType;
 
-public class PlayerInteractEntityListener implements Listener {
+public class EntityDamageEntityListener implements Listener {
 
 	ArmorControl plugin;
 
-	public PlayerInteractEntityListener(ArmorControl plugin) {
+	public EntityDamageEntityListener(ArmorControl plugin) {
 		this.plugin = plugin;
 	}
 
 	@EventHandler
-	public void onInteract(PlayerInteractEntityEvent event) {
+	public void onInteract(EntityDamageByEntityEvent event) {
 
-		Player player = event.getPlayer();
+		Entity attacker = event.getDamager();
+		
+		// Attacker is not a player.
+		if (!attacker.getType().equals(EntityType.PLAYER)) return;
 
 		// We do not have to check on this world.
-		if (plugin.getAPI().isDisabledWorld(player.getLocation().getWorld().getName()))
+		if (plugin.getAPI().isDisabledWorld(attacker.getLocation().getWorld().getName()))
 			return;
 
-		System.out.println(event.getPlayer().getName() + " clicked " + event.getRightClicked());
+		Player player = (Player) attacker;
+		
+		System.out.println(player.getName() + " attacked " + event.getEntity());
 
-		actionType action = actionType.RIGHT_CLICK_MOB;
+		actionType action = actionType.LEFT_CLICK_MOB;
 
-		if (event.getRightClicked().getType().equals(EntityType.PLAYER)) {
-			// Action is right clicked player
-			action = actionType.RIGHT_CLICK_PLAYER;
+		if (event.getEntity().getType().equals(EntityType.PLAYER)) {
+			// Action is left clicked player
+			action = actionType.LEFT_CLICK_PLAYER;
 		}
 
 		ItemStack item = player.getItemInHand();
@@ -63,7 +69,7 @@ public class PlayerInteractEntityListener implements Listener {
 
 			event.setCancelled(true);
 
-			System.out.println("Event (mob click) is cancelled.");
+			System.out.println("Event (mob attack) is cancelled.");
 		}
 	}
 }

@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import me.staartvin.armorcontrol.config.ConfigHandler.actionType;
+import me.staartvin.armorcontrol.restrictions.RestrictionsManager.actionType;
+
+
 
 public class Restriction {
 
