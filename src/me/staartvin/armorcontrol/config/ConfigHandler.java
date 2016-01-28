@@ -200,8 +200,6 @@ public class ConfigHandler {
 	public String[] getRequirementValues(ItemStack item, actionType action, RequirementType reqType) {
 		String itemName = this.findItemName(item);
 		
-		System.out.println("Path: " + itemName + "." + ArmorControl.getTypeToConfigString(action) + ".requirements." + reqType.getConfigString() + ".value");
-		
 		Object value = this.restrictionsConfig.getConfig().get(itemName + ".actions." + ArmorControl.getTypeToConfigString(action) + ".requirements." + reqType.getConfigString() + ".value", null);
 		
 		if (value == null) {
