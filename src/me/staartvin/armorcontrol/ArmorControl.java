@@ -47,6 +47,9 @@ public class ArmorControl extends JavaPlugin {
 		resManager.loadRestrictions();
 		
 		registerListeners();
+		
+		// Check if libraries are installed.
+		this.getResManager().checkLibraries();
 
 		this.getLogger().info(getDescription().getName() + " has been enabled!");
 

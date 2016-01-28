@@ -187,7 +187,7 @@ public class ConfigHandler {
 			RequirementType reqType = plugin.getRequirementManager().findConfigMatch(req);
 			
 			if (reqType == null) {
-				plugin.getLogger().warning("Requirement '" + reqType + "' is not valid!");
+				plugin.getLogger().warning("Requirement '" + req + "' is not valid!");
 				continue;
 			}
 			

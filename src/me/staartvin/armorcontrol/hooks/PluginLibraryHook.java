@@ -19,7 +19,7 @@ public class PluginLibraryHook {
 	
 	public boolean isLoaded(Library lib) {
 		try {
-			return PluginLibrary.getLibrary(lib).isAvailable();
+			return PluginLibrary.isLibraryLoaded(lib);
 		} catch (IllegalArgumentException e) {
 			return false;
 		}

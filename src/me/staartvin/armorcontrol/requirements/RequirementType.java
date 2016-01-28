@@ -2,7 +2,8 @@ package me.staartvin.armorcontrol.requirements;
 
 public enum RequirementType {
 
-	EXP_LEVEL("exp level", new ExpLevelRequirement());
+	EXP_LEVEL("exp level", new ExpLevelRequirement()),
+	AUTORANK_TIME("autorank time", new AutorankTimeRequirement());
 	
 	
 	private String configString = null;

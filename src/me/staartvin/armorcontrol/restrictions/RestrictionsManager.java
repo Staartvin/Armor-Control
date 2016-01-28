@@ -13,6 +13,7 @@ import me.staartvin.armorcontrol.ArmorControl;
 import me.staartvin.armorcontrol.config.ConfigHandler.message;
 import me.staartvin.armorcontrol.requirements.Requirement;
 import me.staartvin.armorcontrol.requirements.RequirementType;
+import me.staartvin.plugins.pluginlibrary.Library;
 import net.md_5.bungee.api.ChatColor;
 
 public class RestrictionsManager {
@@ -70,18 +71,21 @@ public class RestrictionsManager {
 						// Set the description of the requirement (from the
 						// restrictions.yml)
 						requirement.setDescription(plugin.getConfigHandler().getDescription(item, action, reqType));
-						
+
 						// Setup this requirement with the proper options.
-						boolean result = requirement.setOptions(plugin.getConfigHandler().getRequirementValues(itemStack, action, reqType));
-						
+						boolean result = requirement
+								.setOptions(plugin.getConfigHandler().getRequirementValues(itemStack, action, reqType));
+
 						if (!result) {
-							plugin.getLogger().warning("The requirement value of '" + reqType.toString() + "' for the item '" + item + "' is not valid!");
+							plugin.getLogger().warning("The requirement value of '" + reqType.toString()
+									+ "' for the item '" + item + "' is not valid!");
 							continue; // Skip this requirement.
 						}
 
 						requirements.add(requirement);
 					} else {
-						plugin.getLogger().warning("Requirement '" + reqType + "' for item '" + item + "' is not valid!");
+						plugin.getLogger()
+								.warning("Requirement '" + reqType + "' for item '" + item + "' is not valid!");
 					}
 				}
 
@@ -128,7 +132,6 @@ public class RestrictionsManager {
 		if (plugin.getAPI().isDisabledWorld(player.getLocation().getWorld().getName())) {
 			return;
 		}
-			
 
 		// Ignore creative?
 		if (plugin.getConfigHandler().shouldIgnoreCreative()) {
@@ -155,14 +158,15 @@ public class RestrictionsManager {
 			if (dataValue == 0) {
 				dataValue = -1;
 			}
-			
+
 			Restriction r = this.getRestriction(item);
-			
+
 			// No restriction for this item found.
-			if (r == null) continue;
+			if (r == null)
+				continue;
 
 			List<Requirement> failed = r.getFailedRequirements(player, type);
-			
+
 			// Cannot wear this item
 			if (!failed.isEmpty()) {
 				// Remove it from slot and give it back.
@@ -172,9 +176,9 @@ public class RestrictionsManager {
 
 				plugin.getMessageHandler().sendMessage(player,
 						plugin.getConfigHandler().getMessage(message.NOT_ALLOWED_TO_WEAR_ARMOR));
-				
+
 				// Show what the player still has to do to wear this armor.
-				for (Requirement failedReq: failed) {
+				for (Requirement failedReq : failed) {
 					player.sendMessage(ChatColor.RED + "- " + failedReq.getDescription());
 				}
 			}
@@ -223,5 +227,33 @@ public class RestrictionsManager {
 		}
 
 		return null;
+	}
+
+	public void checkLibraries() {
+		// Check if all libraries that are required are loaded.
+
+		for (Restriction r : this.restrictions) {
+			for (actionType type : actionType.values()) {
+				for (Requirement req : r.getRequirements(type)) {
+					if (req == null)
+						continue;
+
+					List<Library> libs = req.getRequiredLibraries();
+					
+					if (libs == null || libs.isEmpty()) continue;
+					
+					for (Library lib : libs) {
+
+						if (lib == null)
+							continue;
+
+						if (!plugin.getPluginLibraryHook().isLoaded(lib)) {
+							plugin.getLogger().warning("For requirement '" + req.getClass().getSimpleName() + "', Armor Control needs '"
+									+ lib.getPluginName() + "' but it is not loaded!");
+						}
+					}
+				}
+			}
+		}
 	}
 }

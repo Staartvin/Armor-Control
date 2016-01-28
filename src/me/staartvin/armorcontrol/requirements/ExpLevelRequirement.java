@@ -1,6 +1,10 @@
 package me.staartvin.armorcontrol.requirements;
 
+import java.util.List;
+
 import org.bukkit.entity.Player;
+
+import me.staartvin.plugins.pluginlibrary.Library;
 
 public class ExpLevelRequirement extends Requirement {
 
@@ -19,6 +23,11 @@ public class ExpLevelRequirement extends Requirement {
 	@Override
 	public boolean meetsRequirement(Player player) {
 		return player.getLevel() >= xpLevel;
+	}
+
+	@Override
+	public List<Library> getRequiredLibraries() {
+		return null;
 	}
 
 }
