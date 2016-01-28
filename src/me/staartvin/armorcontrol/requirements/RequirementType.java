@@ -3,7 +3,8 @@ package me.staartvin.armorcontrol.requirements;
 public enum RequirementType {
 
 	EXP_LEVEL("exp level", new ExpLevelRequirement()),
-	AUTORANK_TIME("autorank time", new AutorankTimeRequirement());
+	AUTORANK_TIME("autorank time", new AutorankTimeRequirement()),
+	MCMMO_SKILL("mcmmo skill level", new McMMOSkillRequirement());
 	
 	
 	private String configString = null;
