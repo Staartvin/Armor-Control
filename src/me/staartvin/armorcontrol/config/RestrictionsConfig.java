@@ -10,13 +10,13 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import me.staartvin.armorcontrol.ArmorControl;
 
-public class Configuration {
+public class RestrictionsConfig {
 
 	private ArmorControl plugin;
 	private File file;
 	private FileConfiguration config;
 
-	public Configuration(ArmorControl plugin) {
+	public RestrictionsConfig(ArmorControl plugin) {
 		this.plugin = plugin;
 	}
 
