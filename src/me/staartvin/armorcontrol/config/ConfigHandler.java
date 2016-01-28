@@ -3,16 +3,18 @@ package me.staartvin.armorcontrol.config;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
 import me.staartvin.armorcontrol.ArmorControl;
+import me.staartvin.armorcontrol.requirements.RequirementType;
 import me.staartvin.armorcontrol.restrictions.RestrictionsManager.actionType;
 import net.md_5.bungee.api.ChatColor;
 
 public class ConfigHandler {
 
 	private ArmorControl plugin;
-	private Configuration restrictionsConfig;
+	private RestrictionsConfig restrictionsConfig;
 
 	public enum message {
 		NOT_ALLOWED_TO_WEAR_ARMOR, NOT_ALLOWED_TO_USE, NOT_ALLOWED_TO_SHOOT_BOW
@@ -20,7 +22,7 @@ public class ConfigHandler {
 
 	public ConfigHandler(ArmorControl instance) {
 		plugin = instance;
-		restrictionsConfig = new Configuration(instance);
+		restrictionsConfig = new RestrictionsConfig(instance);
 
 		this.restrictionsConfig.reloadConfig();
 		instance.reloadConfig();
@@ -46,36 +48,18 @@ public class ConfigHandler {
 
 		// Messages
 		plugin.getConfig().addDefault("Messages." + message.NOT_ALLOWED_TO_WEAR_ARMOR.toString(),
-				"&cYou cannot wear this item! You must be at least level &6{0}.");
+				"&cYou cannot wear this item! You need to:");
 		plugin.getConfig().addDefault("Messages." + message.NOT_ALLOWED_TO_USE.toString(),
-				"&cYou cannot use this item this way! ({0}) You must be at least level &6{1}.");
+				"&cYou cannot use this action ({0}) on this item! You need to:");
 		plugin.getConfig().addDefault("Messages." + message.NOT_ALLOWED_TO_SHOOT_BOW.toString(),
-				"&cYou cannot use a bow! You must be at least level &6{0}");
+				"&cYou cannot use a bow! You need to:");
 
 		plugin.getConfig().options().copyDefaults(true);
 		plugin.saveConfig();
 	}
 
-	public Configuration getFile() {
+	public RestrictionsConfig getFile() {
 		return this.restrictionsConfig;
-	}
-
-	public int getActionLevel(int itemID, int dataValue, actionType type) {
-		// Get the level of an item for a particular action
-
-		// Invalid action type
-		if (type == null)
-			return 0;
-
-		String itemName = this.findItemName(itemID, dataValue);
-
-		// No restriction for this item
-		if (itemName == null)
-			return 0;
-
-		String typeString = type.toString().toLowerCase().replace("_", " ");
-
-		return this.restrictionsConfig.getConfig().getInt(itemName + ".actions." + typeString, 0);
 	}
 	
 	public int getActionLevel(ItemStack item, actionType type) {
@@ -91,21 +75,9 @@ public class ConfigHandler {
 		if (itemName == null)
 			return 0;
 
-		String typeString = type.toString().toLowerCase().replace("_", " ");
+		String typeString = ArmorControl.getTypeToConfigString(type);
 
 		return this.restrictionsConfig.getConfig().getInt(itemName + ".actions." + typeString, 0);
-	}
-
-	private String findItemName(int itemID, int dataValue) {
-		// Used to find the name in the config so we can grab data of off it.
-
-		for (String name : this.restrictionsConfig.getConfig().getKeys(false)) {
-			if (this.getItemID(name) == itemID && this.getDataValue(name) == dataValue) {
-				return name;
-			}
-		}
-
-		return null;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -150,6 +122,10 @@ public class ConfigHandler {
 		}
 
 		return items;
+	}
+	
+	public String getDescription(String itemName, actionType type, RequirementType reqType) {
+		return this.restrictionsConfig.getConfig().getString(itemName + ".actions." + ArmorControl.getTypeToConfigString(type) + ".requirements." + reqType.getConfigString() + ".description", "No description set.");
 	}
 
 	public String getMessage(message mess, String... strings) {
@@ -197,6 +173,45 @@ public class ConfigHandler {
 	
 	public boolean shouldIgnoreCreative() {
 		return plugin.getConfig().getBoolean("ignore creative");
+	}
+	
+	
+	public List<RequirementType> getRequirementStrings(String itemName, actionType type) {
+		List<RequirementType> strings = new ArrayList<RequirementType>();
+		
+		ConfigurationSection section = this.restrictionsConfig.getConfig().getConfigurationSection(itemName + ".actions." + ArmorControl.getTypeToConfigString(type) + ".requirements");
+		
+		if (section == null) return strings;
+		
+		for (String req: section.getKeys(false)) {
+			RequirementType reqType = plugin.getRequirementManager().findConfigMatch(req);
+			
+			if (reqType == null) {
+				plugin.getLogger().warning("Requirement '" + reqType + "' is not valid!");
+				continue;
+			}
+			
+			strings.add(reqType);
+		}
+		
+		return strings;
+	}
+	
+	public String[] getRequirementValues(ItemStack item, actionType action, RequirementType reqType) {
+		String itemName = this.findItemName(item);
+		
+		System.out.println("Path: " + itemName + "." + ArmorControl.getTypeToConfigString(action) + ".requirements." + reqType.getConfigString() + ".value");
+		
+		Object value = this.restrictionsConfig.getConfig().get(itemName + ".actions." + ArmorControl.getTypeToConfigString(action) + ".requirements." + reqType.getConfigString() + ".value", null);
+		
+		if (value == null) {
+			plugin.getLogger().warning("Value of requirement '" + reqType + "' of action '" + action + "' of item '" + item + "' is missing!");
+			return new String[]{};
+		}
+		
+		String[] options = value.toString().split(";");
+		
+		return options;
 	}
 
 }

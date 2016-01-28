@@ -1,5 +1,7 @@
 package me.staartvin.armorcontrol.listeners;
 
+import java.util.List;
+
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -11,8 +13,11 @@ import org.bukkit.inventory.ItemStack;
 
 import me.staartvin.armorcontrol.ArmorControl;
 import me.staartvin.armorcontrol.config.ConfigHandler.message;
+import me.staartvin.armorcontrol.requirements.Requirement;
+import me.staartvin.armorcontrol.restrictions.Restriction;
 import me.staartvin.armorcontrol.restrictions.RestrictionsManager.actionType;
 import me.staartvin.armorcontrol.util.Vector3D;
+import net.md_5.bungee.api.ChatColor;
 
 public class PlayerInteractListener implements Listener {
 
@@ -26,7 +31,7 @@ public class PlayerInteractListener implements Listener {
 	public void onInteract(PlayerInteractEvent event) {
 
 		Player player = event.getPlayer();
-		
+
 		String worldName = player.getLocation().getWorld().getName();
 
 		// We do not have to check on this world.
@@ -44,8 +49,6 @@ public class PlayerInteractListener implements Listener {
 		// No item in hand, so nothing to check
 		if (item == null)
 			return;
-
-		int requiredLevel = 0;
 
 		actionType type = null;
 
@@ -72,7 +75,6 @@ public class PlayerInteractListener implements Listener {
 							.distanceSquared(observerPos)) {
 
 						hit = target;
-						System.out.println("Looked at player '" + target.getName() + "'!");
 					}
 				}
 			}
@@ -95,23 +97,32 @@ public class PlayerInteractListener implements Listener {
 			}
 		}
 
-		requiredLevel = plugin.getResManager().getRequiredLevel(item, type);
-
 		// Check if restrictions are disabled on this world.
 		if (plugin.getAPI().isDisabledWorld(item, worldName)) {
 			return;
 		}
 
-		// Required level is 0.
-		if (requiredLevel <= 0)
+		Restriction r = plugin.getResManager().getRestriction(item);
+
+		// No restriction for this item found.
+		if (r == null)
 			return;
 
-		// Player does not have the sufficient level
-		if (requiredLevel > player.getLevel()) {
-			plugin.getMessageHandler().sendMessage(player, plugin.getConfigHandler()
-					.getMessage(message.NOT_ALLOWED_TO_USE, type.toString(), requiredLevel + ""));
+		List<Requirement> failed = r.getFailedRequirements(player, type);
 
-			event.setCancelled(true);
+		// All requirements are met, allow to use.
+		if (failed.isEmpty())
+			return;
+
+		// Cannot use this item
+		event.setCancelled(true);
+
+		plugin.getMessageHandler().sendMessage(player,
+				plugin.getConfigHandler().getMessage(message.NOT_ALLOWED_TO_USE, type.toString()));
+
+		// Show what the player still has to do to use this item.
+		for (Requirement failedReq : failed) {
+			player.sendMessage(ChatColor.RED + "- " + failedReq.getDescription());
 		}
 	}
 

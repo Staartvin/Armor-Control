@@ -10,7 +10,9 @@ import me.staartvin.armorcontrol.listeners.EntityDamageEntityListener;
 import me.staartvin.armorcontrol.listeners.PlayerInteractEntityListener;
 import me.staartvin.armorcontrol.listeners.PlayerInteractListener;
 import me.staartvin.armorcontrol.messagehandler.MessageHandler;
+import me.staartvin.armorcontrol.requirements.RequirementManager;
 import me.staartvin.armorcontrol.restrictions.RestrictionsManager;
+import me.staartvin.armorcontrol.restrictions.RestrictionsManager.actionType;
 import me.staartvin.armorcontrol.tasks.InventoryArmorTask;
 
 /**
@@ -22,6 +24,8 @@ public class ArmorControl extends JavaPlugin {
 	private API api = new API(this);
 	private RestrictionsManager resManager = new RestrictionsManager(this);
 	private MessageHandler messageHandler = new MessageHandler(this);
+	
+	private RequirementManager reqManager = new RequirementManager(this);
 
 	private ConfigHandler configHandler;
 
@@ -74,6 +78,11 @@ public class ArmorControl extends JavaPlugin {
 			this.getLogger().info(message);
 		}
 	}
+	
+	
+	public static String getTypeToConfigString(actionType type) {
+		return type.toString().toLowerCase().replace("_", " ");
+	}
 
 	/**
 	 * Get an instance of Armor Control. After an instance has been called, you
@@ -107,5 +116,13 @@ public class ArmorControl extends JavaPlugin {
 
 	public void setMessageHandler(MessageHandler messageHandler) {
 		this.messageHandler = messageHandler;
+	}
+
+	public RequirementManager getRequirementManager() {
+		return reqManager;
+	}
+
+	public void setRequirementManager(RequirementManager reqManager) {
+		this.reqManager = reqManager;
 	}
 }

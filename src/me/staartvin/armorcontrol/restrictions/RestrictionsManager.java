@@ -11,6 +11,9 @@ import org.bukkit.inventory.PlayerInventory;
 
 import me.staartvin.armorcontrol.ArmorControl;
 import me.staartvin.armorcontrol.config.ConfigHandler.message;
+import me.staartvin.armorcontrol.requirements.Requirement;
+import me.staartvin.armorcontrol.requirements.RequirementType;
+import net.md_5.bungee.api.ChatColor;
 
 public class RestrictionsManager {
 
@@ -29,7 +32,7 @@ public class RestrictionsManager {
 	public void loadRestrictions() {
 		// Clear res.
 		restrictions.clear();
-		
+
 		List<String> items = plugin.getConfigHandler().getRestrictedItems();
 
 		int count = 0;
@@ -51,9 +54,38 @@ public class RestrictionsManager {
 			// Set item id
 			r.setItemID(itemID);
 
-			// For every action, store a level.
+			// For every action, store their requirements.
 			for (actionType action : actionType.values()) {
-				r.setActionLevel(action, plugin.getConfigHandler().getActionLevel(itemStack, action));
+
+				List<RequirementType> reqTypes = plugin.getConfigHandler().getRequirementStrings(item, action);
+
+				List<Requirement> requirements = new ArrayList<Requirement>();
+
+				// Get all requirements
+				for (RequirementType reqType : reqTypes) {
+					Requirement requirement = plugin.getRequirementManager().createRequirement(reqType);
+
+					if (requirement != null) {
+
+						// Set the description of the requirement (from the
+						// restrictions.yml)
+						requirement.setDescription(plugin.getConfigHandler().getDescription(item, action, reqType));
+						
+						// Setup this requirement with the proper options.
+						boolean result = requirement.setOptions(plugin.getConfigHandler().getRequirementValues(itemStack, action, reqType));
+						
+						if (!result) {
+							plugin.getLogger().warning("The requirement value of '" + reqType.toString() + "' for the item '" + item + "' is not valid!");
+							continue; // Skip this requirement.
+						}
+
+						requirements.add(requirement);
+					} else {
+						plugin.getLogger().warning("Requirement '" + reqType + "' for item '" + item + "' is not valid!");
+					}
+				}
+
+				r.setRequirements(action, requirements);
 			}
 
 			if (dataValue >= 0) {
@@ -76,40 +108,27 @@ public class RestrictionsManager {
 		plugin.debugMessage("Loaded " + count + " restrictions!");
 	}
 
-	public int getRequiredLevel(int itemID, int dataValue, actionType type) {
-
-		for (Restriction entry : restrictions) {
-			if (entry.getItemID() != itemID)
-				continue;
-
-			if (!entry.hasEqualDataValue(dataValue))
-				continue;
-
-			return entry.getActionLevel(type);
-		}
-
-		return 0;
-	}
-
-	@SuppressWarnings("deprecation")
-	public int getRequiredLevel(ItemStack item, actionType type) {
-
-		int dataValue = item.getDurability();
-
-		if (shouldIgnoreDataValue(item) || item.getDurability() == 0) {
-			dataValue = -1;
-		}
-
-		return this.getRequiredLevel(item.getTypeId(), dataValue, type);
-	}
+	// @SuppressWarnings("deprecation")
+	// public int getRequiredLevel(ItemStack item, actionType type) {
+	//
+	// int dataValue = item.getDurability();
+	//
+	// if (shouldIgnoreDataValue(item) || item.getDurability() == 0) {
+	// dataValue = -1;
+	// }
+	//
+	// return this.getRequiredLevel(item.getTypeId(), dataValue, type);
+	// }
 
 	public void checkArmor(Player player) {
-		// Check if player is wearing restricted items
+		// Checks if player is wearing restricted items
 		PlayerInventory inv = player.getInventory();
 
 		// We do not have to check on this world.
-		if (plugin.getAPI().isDisabledWorld(player.getLocation().getWorld().getName()))
+		if (plugin.getAPI().isDisabledWorld(player.getLocation().getWorld().getName())) {
 			return;
+		}
+			
 
 		// Ignore creative?
 		if (plugin.getConfigHandler().shouldIgnoreCreative()) {
@@ -136,18 +155,28 @@ public class RestrictionsManager {
 			if (dataValue == 0) {
 				dataValue = -1;
 			}
+			
+			Restriction r = this.getRestriction(item);
+			
+			// No restriction for this item found.
+			if (r == null) continue;
 
-			int requiredLevel = plugin.getResManager().getRequiredLevel(item, type);
-
+			List<Requirement> failed = r.getFailedRequirements(player, type);
+			
 			// Cannot wear this item
-			if (player.getLevel() < requiredLevel) {
+			if (!failed.isEmpty()) {
 				// Remove it from slot and give it back.
 				player.getInventory().setItem(i, null);
 
 				this.giveItem(player, item);
 
 				plugin.getMessageHandler().sendMessage(player,
-						plugin.getConfigHandler().getMessage(message.NOT_ALLOWED_TO_WEAR_ARMOR, requiredLevel + ""));
+						plugin.getConfigHandler().getMessage(message.NOT_ALLOWED_TO_WEAR_ARMOR));
+				
+				// Show what the player still has to do to wear this armor.
+				for (Requirement failedReq: failed) {
+					player.sendMessage(ChatColor.RED + "- " + failedReq.getDescription());
+				}
 			}
 		}
 	}
@@ -172,5 +201,27 @@ public class RestrictionsManager {
 		// Since these items all have a stack size of 1, we can safely assume
 		// that those durability values can be ignored.
 		return item.getMaxStackSize() == 1;
+	}
+
+	@SuppressWarnings("deprecation")
+	public Restriction getRestriction(ItemStack item) {
+
+		int dataValue = item.getDurability();
+
+		if (shouldIgnoreDataValue(item) || item.getDurability() == 0) {
+			dataValue = -1;
+		}
+
+		for (Restriction r : this.restrictions) {
+			if (r.getItemID() != item.getTypeId())
+				continue;
+
+			if (r.hasEqualDataValue(dataValue))
+				;
+
+			return r;
+		}
+
+		return null;
 	}
 }

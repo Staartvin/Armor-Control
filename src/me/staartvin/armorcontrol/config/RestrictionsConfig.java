@@ -3,12 +3,16 @@ package me.staartvin.armorcontrol.config;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import me.staartvin.armorcontrol.ArmorControl;
+import me.staartvin.armorcontrol.restrictions.RestrictionsManager.actionType;
 
 public class RestrictionsConfig {
 
@@ -67,7 +71,7 @@ public class RestrictionsConfig {
 
 		// Load armor
 		// Load leather armor
-		this.config.addDefault("Leather Helmet.item id", 298);
+		/*this.config.addDefault("Leather Helmet.item id", 298);
 		this.config.addDefault("Leather Helmet.actions.wear", 5);
 
 		this.config.addDefault("Leather Chestplate.item id", 299);
@@ -180,6 +184,7 @@ public class RestrictionsConfig {
 		this.config.addDefault("Golden apple2.data value", 1);
 		this.config.addDefault("Golden apple2.actions.right click block", 15);
 		this.config.addDefault("Golden apple2.actions.right click air", 15);
+		*/
 
 		getConfig().options().copyDefaults(true);
 		saveConfig();

@@ -1,11 +1,14 @@
 package me.staartvin.armorcontrol.api;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import me.staartvin.armorcontrol.ArmorControl;
+import me.staartvin.armorcontrol.requirements.Requirement;
+import me.staartvin.armorcontrol.restrictions.Restriction;
 import me.staartvin.armorcontrol.restrictions.RestrictionsManager.actionType;
 
 
@@ -26,11 +29,22 @@ public class API {
 	}
 	
 	public boolean isAllowedToUse(Player player, ItemStack item, actionType action) {
-		return player.getLevel() >= this.getLevelOfItem(item, action);
+		
+		Restriction r = plugin.getResManager().getRestriction(item);
+		
+		// No restriction
+		if (r == null) return true;
+		
+		return r.meetsAllRequirements(player, action);
 	}
 	
-	public int getLevelOfItem(ItemStack item, actionType action) {
-		return plugin.getResManager().getRequiredLevel(item, action);
+	public List<Requirement> getRequirements(ItemStack item, actionType type) {
+		
+		Restriction r = plugin.getResManager().getRestriction(item);
+		
+		if (r == null) return new ArrayList<Requirement>();
+		
+		return r.getRequirements(type);
 	}
 	
 	/**
