@@ -5,6 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import me.staartvin.armorcontrol.api.API;
 import me.staartvin.armorcontrol.commands.Commands;
 import me.staartvin.armorcontrol.config.ConfigHandler;
+import me.staartvin.armorcontrol.hooks.PluginLibraryHook;
 import me.staartvin.armorcontrol.listeners.EntityBowListener;
 import me.staartvin.armorcontrol.listeners.EntityDamageEntityListener;
 import me.staartvin.armorcontrol.listeners.PlayerInteractEntityListener;
@@ -26,6 +27,7 @@ public class ArmorControl extends JavaPlugin {
 	private MessageHandler messageHandler = new MessageHandler(this);
 	
 	private RequirementManager reqManager = new RequirementManager(this);
+	private PluginLibraryHook plHook = new PluginLibraryHook(this);
 
 	private ConfigHandler configHandler;
 
@@ -124,5 +126,13 @@ public class ArmorControl extends JavaPlugin {
 
 	public void setRequirementManager(RequirementManager reqManager) {
 		this.reqManager = reqManager;
+	}
+
+	public PluginLibraryHook getPluginLibraryHook() {
+		return plHook;
+	}
+
+	public void setPluginLibraryHook(PluginLibraryHook plHook) {
+		this.plHook = plHook;
 	}
 }
