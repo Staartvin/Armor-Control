@@ -77,15 +77,14 @@ public class RestrictionsManager {
 								.setOptions(plugin.getConfigHandler().getRequirementValues(itemStack, action, reqType));
 
 						if (!result) {
-							plugin.getLogger().warning("The requirement value of '" + reqType.toString()
+							plugin.logMessage(ChatColor.RED + "The requirement value of '" + reqType.toString()
 									+ "' for the item '" + item + "' is not valid!");
 							continue; // Skip this requirement.
 						}
 
 						requirements.add(requirement);
 					} else {
-						plugin.getLogger()
-								.warning("Requirement '" + reqType + "' for item '" + item + "' is not valid!");
+						plugin.logMessage(ChatColor.RED + "Requirement '" + reqType + "' for item '" + item + "' is not valid!");
 					}
 				}
 
@@ -248,8 +247,8 @@ public class RestrictionsManager {
 							continue;
 
 						if (!plugin.getPluginLibraryHook().isLoaded(lib)) {
-							plugin.getLogger().warning("For requirement '" + req.getClass().getSimpleName() + "', Armor Control needs '"
-									+ lib.getPluginName() + "' but it is not loaded!");
+							plugin.logMessage(ChatColor.RED + "For requirement '" + ChatColor.GOLD + req.getClass().getSimpleName() + ChatColor.RED +  "', Armor Control needs '"
+									+ lib.getPluginName() + "' but it is not loaded on the server!");
 						}
 					}
 				}

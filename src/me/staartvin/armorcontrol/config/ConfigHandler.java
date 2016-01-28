@@ -48,11 +48,11 @@ public class ConfigHandler {
 
 		// Messages
 		plugin.getConfig().addDefault("Messages." + message.NOT_ALLOWED_TO_WEAR_ARMOR.toString(),
-				"&cYou cannot wear this item! You need to:");
+				"&cYou cannot wear this item! You still need to:");
 		plugin.getConfig().addDefault("Messages." + message.NOT_ALLOWED_TO_USE.toString(),
-				"&cYou cannot use this action ({0}) on this item! You need to:");
+				"&cYou cannot use this action ({0}) on this item! You still need to:");
 		plugin.getConfig().addDefault("Messages." + message.NOT_ALLOWED_TO_SHOOT_BOW.toString(),
-				"&cYou cannot use a bow! You need to:");
+				"&cYou cannot use a bow! You still need to:");
 
 		plugin.getConfig().options().copyDefaults(true);
 		plugin.saveConfig();
@@ -125,7 +125,7 @@ public class ConfigHandler {
 	}
 	
 	public String getDescription(String itemName, actionType type, RequirementType reqType) {
-		return this.restrictionsConfig.getConfig().getString(itemName + ".actions." + ArmorControl.getTypeToConfigString(type) + ".requirements." + reqType.getConfigString() + ".description", "No description set.");
+		return this.restrictionsConfig.getConfig().getString(itemName + ".actions." + ArmorControl.getTypeToConfigString(type) + ".requirements." + reqType.getConfigString() + ".description", "No description for this requirement set.");
 	}
 
 	public String getMessage(message mess, String... strings) {

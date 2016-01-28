@@ -1,5 +1,6 @@
 package me.staartvin.armorcontrol;
 
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.staartvin.armorcontrol.api.API;
@@ -87,6 +88,11 @@ public class ArmorControl extends JavaPlugin {
 	
 	public static String getTypeToConfigString(actionType type) {
 		return type.toString().toLowerCase().replace("_", " ");
+	}
+	
+	public void logMessage(String message) {
+		// This makes sure it can support colours.
+		this.getServer().getConsoleSender().sendMessage(ChatColor.GRAY + "[ArmorControl] " + message);
 	}
 
 	/**
