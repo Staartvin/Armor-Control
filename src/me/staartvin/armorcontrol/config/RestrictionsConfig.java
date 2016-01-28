@@ -3,16 +3,12 @@ package me.staartvin.armorcontrol.config;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import me.staartvin.armorcontrol.ArmorControl;
-import me.staartvin.armorcontrol.restrictions.RestrictionsManager.actionType;
 
 public class RestrictionsConfig {
 
